@@ -1,0 +1,26 @@
+package pvt73app.projectm;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class HelloRestControllerTests {
+	HelloRestController hrc = new HelloRestController();
+	
+	@Test
+	public void hejBombTestSimple() {
+		assertEquals("Hej Bomb", hrc.hejBomb());
+	}
+	
+	@Test
+	public void greetingTest() {
+		System.out.println(hrc.greeting("Moon"));
+		assertEquals("Hello, Moon.", hrc.greeting("Moon"));
+	}
+	
+	@Test
+	public void jsonTestTest() {
+		assertEquals("test", hrc.hejBomb("test").getName());
+	}
+
+}
