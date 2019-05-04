@@ -11,11 +11,14 @@ cache:
   directories:
   - $HOME/.m2
 
-#  script: 
-#   - ./mvn clean package azure-webapp:deploy
+script: 
+- mvn clean package azure-webapp:deploy
 
-before_deploy: "echo 'Redo? Nu kommer det?'"
+before_deploy:
+ - "echo 'Redo? Nu kommer det?'"
+ - mv .gitignore.production .gitignore
 deploy:
  provider: azure_web_apps
  verbose: true
+ skip_cleanup: true
 
