@@ -12,7 +12,7 @@ cache:
   - $HOME/.m2
 
 script: 
-- mvn clean package azure-webapp:deploy
+- mvn clean package # azure-webapp:deploy
 
 before_deploy:
  - "echo 'Redo? Nu kommer det?'"
