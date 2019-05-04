@@ -10,4 +10,9 @@ public class ProjectmApplication {
 		SpringApplication.run(ProjectmApplication.class, args);
 	}
 
+	public int getOne() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
 }

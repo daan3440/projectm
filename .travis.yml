@@ -15,10 +15,10 @@ script:
 - mvn clean package # azure-webapp:deploy
 
 before_deploy:
- - "echo 'Redo? Nu kommer det?'"
+ - "echo 'Redo? Nu kommer det.'"
  # - mv .gitignore.production .gitignore
 deploy:
  provider: azure_web_apps
  verbose: true
- skip_cleanup: true
+# skip_cleanup: true
 
