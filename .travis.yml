@@ -16,7 +16,7 @@ script:
 
 before_deploy:
  - "echo 'Redo? Nu kommer det?'"
- - mv .gitignore.production .gitignore
+ # - mv .gitignore.production .gitignore
 deploy:
  provider: azure_web_apps
  verbose: true
