@@ -55,7 +55,7 @@ public class HelloRestController {
 
 	@GetMapping("/sayHelloBomb")
 	public String hejBomb() {
-		return "Hej Bomben";
+		return "Hej Bomben 2";
 	}
 	
 	

@@ -9,7 +9,7 @@ public class HelloRestControllerTests {
 	
 	@Test
 	public void hejBombTestSimple() {
-		assertEquals("Hej Bomben", hrc.hejBomb());
+		assertEquals("Hej Bomben 2", hrc.hejBomb());
 	}
 	
 	@Test
