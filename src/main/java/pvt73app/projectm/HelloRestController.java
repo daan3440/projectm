@@ -57,6 +57,10 @@ public class HelloRestController {
 	public String hejBomb() {
 		return "Hej Bomben 2";
 	}
+	@GetMapping("/sayHelloBomb3")
+	public String hejBomb3() {
+		return "Hej Bomben 3";
+	}
 	
 	
 	@CrossOrigin
