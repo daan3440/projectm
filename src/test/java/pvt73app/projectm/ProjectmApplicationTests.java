@@ -17,8 +17,8 @@ public class ProjectmApplicationTests {
 	
 	@Test
 	public void oneIsOne() {
-		ProjectmApplication pvt = new ProjectmApplication ();
-		assertEquals(1, pvt.getOne());
+		ProjectmApplication pvt1 = new ProjectmApplication ();
+		assertEquals(1, pvt1.getOne());
 	}
 
 }
