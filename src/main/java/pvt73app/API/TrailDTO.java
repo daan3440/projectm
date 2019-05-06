@@ -2,6 +2,7 @@ package pvt73app.API;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import pvt73app.projectm.GeographicalPositionDTO;
 
 @JsonIgnoreProperties(ignoreUnknown=true)

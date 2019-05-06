@@ -1,8 +1,10 @@
-package pvt73app.projectm;
+package com.pvt73app.projectm;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import pvt73app.projectm.HelloRestController;
 
 public class HelloRestControllerTests {
 	HelloRestController hrc = new HelloRestController();

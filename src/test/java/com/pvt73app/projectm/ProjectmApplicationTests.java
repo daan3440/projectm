@@ -1,4 +1,4 @@
-package pvt73app.projectm;
+package com.pvt73app.projectm;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import pvt73app.projectm.ProjectmApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

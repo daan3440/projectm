@@ -21,9 +21,9 @@ public class User {
 	}
 	//TODO SLå ihop names - MEN bara just nu...
 	
-	public String getName() {		
-		return fname +" "+ lname;
-	}
+//	public String getName() {		
+//		return fname +" "+ lname;
+//	}
 
 	public String getFname(){
 		return fname;

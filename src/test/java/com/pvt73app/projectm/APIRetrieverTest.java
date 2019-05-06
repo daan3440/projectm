@@ -1,4 +1,4 @@
-package pvt73app.projectm;
+package com.pvt73app.projectm;
 
 import static org.junit.Assert.*;
 

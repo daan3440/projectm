@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import pvt73app.MYSQL.User;
-import pvt73app.MYSQL.UserRepository;
-
 import java.sql.Timestamp;
 import java.util.Optional;
 
@@ -19,15 +16,20 @@ import java.util.Optional;
 @RequestMapping
 public class SQLController {
 
-	@Autowired
+//	@Autowired
 	private UserRepository userRepository;
-	@Autowired
+//	@Autowired
 	private UserRunsRepository userRunsRepository;
-	@Autowired
+//	@Autowired
 	private TrailRepository trailRepository;
-	@Autowired
+//	@Autowired
 	private GroupRepository groupRepository; // TODO: Make a new controller for different 
 											 //repos so that we won't get cluttered code
+	
+	@GetMapping("/hejSQL")
+	public String hejSQL() {
+		return "SQL up!";
+	}
 	
 	@GetMapping(path="/addUser")
 	public @ResponseBody String addNewUser (@RequestParam(required = true) String fname,

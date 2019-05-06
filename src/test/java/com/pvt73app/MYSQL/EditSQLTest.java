@@ -1,9 +1,12 @@
-package pvt73app.MYSQL;
+package com.pvt73app.MYSQL;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import pvt73app.MYSQL.SQLController;
+import pvt73app.MYSQL.UserRuns;
 
 public class EditSQLTest {
 	UserRuns ur = new UserRuns(); 
