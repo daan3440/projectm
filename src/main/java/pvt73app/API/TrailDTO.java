@@ -82,6 +82,7 @@ public class TrailDTO {
 	@Override
 	public String toString() {
 		return "TrailDTO [geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name
-				+ ", description=" + description + ", location=" + location + "]";
+				+ ", description=tillfälligt bortagen" + ", location=" + location + ", geoLocationX=" + geoLocationX
+				+ ", geoLocationY=" + geoLocationY + "]";
 	}
 }

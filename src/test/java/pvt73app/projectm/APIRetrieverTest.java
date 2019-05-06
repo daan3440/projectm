@@ -109,16 +109,16 @@ public class APIRetrieverTest {
 	public void getTrailsWithGeoPosLocationDescriptionTest() {
 		createTrailLocationByIdMap();
 		List<TrailDTO> trails = api.getTrails();
-		List<String> geoLocs = new ArrayList<>(); 
+		List<String> trailStrings = new ArrayList<>(); 
 		
 		for(TrailDTO t : trails) {
 			assertNotNull(t.getDescription());
 			assertEquals(trailLocationNameById.get(t.getId()), t.getLocation());
-			geoLocs.add(t.getName() + " X " + t.getGeoLocationX() + " Y " + t.getGeoLocationY());
+			trailStrings.add(t.toString());
 		}
 		
 		
-		for(String s : geoLocs) {
+		for(String s : trailStrings) {
 			System.out.println(s);
 		}
 		assertEquals(20, trails.size());
