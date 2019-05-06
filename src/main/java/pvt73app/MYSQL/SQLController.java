@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pvt73app.MYSQL.User;
 import pvt73app.MYSQL.UserRepository;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Controller
@@ -20,6 +21,10 @@ public class SQLController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private UserRunsRepository userRunsRepository;
+	@Autowired
+	private TrailRepository trailRepository;
 	@Autowired
 	private GroupRepository groupRepository; // TODO: Make a new controller for different 
 											 //repos so that we won't get cluttered code
@@ -45,12 +50,35 @@ public class SQLController {
 		userRepository.save(n);
 		return "Saved";
 	}
+	// /addUserRun?uid=1333&tid=namnppåspår&
+	@GetMapping(path="/addUserRun")	
+	public @ResponseBody String addUserRun(@RequestParam(required = true) int uid,
+			@RequestParam(required = true) String tid, 
+			@RequestParam(required = true) Timestamp date,
+			@RequestParam(required = true) double time,
+			@RequestParam(required = true) int length,
+			String comment) {
+				
+		UserRuns ur = new UserRuns();
+		ur.setUserId(uid);
+		ur.setTid(tid);
+		ur.setDate(date);
+		ur.setTime(time);
+		ur.setLength(length);
+		if (comment != null)
+			ur.setComment(comment);
+		else {
+			String tmp = " ";
+			ur.setComment(tmp);
+		}
+		userRunsRepository.save(ur);
+		return "Saved";
+	}
 	
 	@GetMapping(path="/addGroup")
 	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname,
 											Integer uid) {
 
-		
 		Group group = new Group();
 		group.setGroupname(groupname);
 		groupRepository.save(group);
@@ -68,9 +96,16 @@ public class SQLController {
 		return "Success";
 		}
 	
-	@GetMapping(path="/all")
+	@GetMapping(path="/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
+	}
+	
+	@GetMapping(path="/allTrails")
+	public @ResponseBody Iterable<Trail> getAllTrails() {
+		return trailRepository.findAll(); 
+				
+//				.findAll();
 	}
 
 	@GetMapping(path="/getUser")

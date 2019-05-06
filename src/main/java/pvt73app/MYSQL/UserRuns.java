@@ -1,5 +1,8 @@
 package pvt73app.MYSQL;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,18 +13,47 @@ import javax.persistence.Id;
 public class UserRuns {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int tid;
+    private int id;
+    private int uid;
+	private String tid;
+	private Timestamp date;
+	private double time;
 	private int length;
 	private String comment;
 
-	public int getTid(){
+	public String getTid(){
 		return tid;
 	}
 
-	public void setTid(int tid){
+	
+	public void setTid(String tid){
 		this.tid=tid;
 	}
+	
+	public int getUserId(){
+		return uid;
+	}
 
+	public void setUserId(int uid){
+		this.uid=uid;
+	}
+	
+	public Timestamp getDate(){
+		return date;
+	}
+	
+	public void setDate(Timestamp date){
+		this.date=date;
+	}
+	
+	public double getTime(){
+		return time;
+	}
+	
+	public void setTime(double time){
+		this.time=time;
+	}
+	
 	public int getLength(){
 		return length;
 	}
