@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pvt73app.projectm;
+package com.pvt73app.projectm;
 
 import org.junit.Test;
 

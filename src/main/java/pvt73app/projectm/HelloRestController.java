@@ -62,7 +62,6 @@ public class HelloRestController {
 		return "Hej Bomben 3";
 	}
 	
-	
 	@CrossOrigin
 	@RequestMapping("/hejBomb") 
 	public HejBomb hejBomb(@RequestParam(required=false, defaultValue="TEST") String name){

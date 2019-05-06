@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pvt73app.Coordinates.RT90Position;
 import pvt73app.Coordinates.WGS84Position;
+import pvt73app.API.GeographicalPositionDTO;
+
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class TrailDTO {
