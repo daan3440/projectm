@@ -35,7 +35,6 @@ public class APIRetriever {
 		for (JsonNode node : objects) {
 			JsonNode value = node.get("Value");
 
-			
 			try {
 				if (value != null) {
 					if (value.isTextual()) {
@@ -55,6 +54,32 @@ public class APIRetriever {
 		}
 
 		return attributes;
+	}
+	
+	public List<TrailDTO> getTrailsWithDescription(){
+		List<TrailDTO> trails = getTrails();
+		
+		for(TrailDTO t : trails) {
+			List<TrailAttributeDTO> attributes = getTrailAttributes(t.getId());
+			
+			for(TrailAttributeDTO attribute: attributes) {
+				if(isAttributeDescription(attribute) && attribute instanceof TrailAttributeStringValueDTO) {
+					TrailAttributeStringValueDTO tv = (TrailAttributeStringValueDTO) attribute;
+					t.setDescription(tv.getValue());
+				}
+			}
+			
+			if(t.getDescription() == null) {
+				t.setDescription("Beskrivning saknas");
+			}
+		}
+		
+		return trails;
+		
+	}
+	
+	private boolean isAttributeDescription(TrailAttributeDTO attribute) {
+		return attribute.getGroup().equals("Beskrivning av enheten") && attribute.getId().equals("ShortDescription") && attribute.getName().equals("Introduktion");
 	}
 
 	public String getIdUrl(String id) {

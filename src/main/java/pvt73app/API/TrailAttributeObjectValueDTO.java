@@ -20,8 +20,8 @@ public class TrailAttributeObjectValueDTO extends TrailAttributeDTO {
 
 	@Override
 	public String toString() {
-		return "TrailAttributeObjectValueDTO [value=" + value + ", getGroup()=" + getGroup() + ", getId()=" + getId()
-				+ ", getName()=" + getName() + "]";
+		return "TrailAttributeObjectValueDTO [getGroup()=" + getGroup() + ", getId()=" + getId()
+				+ ", getName()=" + getName() + "value="+value+ "]";
 	}
 	
 }

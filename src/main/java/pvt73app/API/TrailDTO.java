@@ -2,7 +2,6 @@ package pvt73app.API;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import pvt73app.projectm.GeographicalPositionDTO;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class TrailDTO {
@@ -12,6 +11,7 @@ public class TrailDTO {
 	private String id;
 	@JsonProperty("Name")
 	private String name;
+	private String description;
 	
 	public TrailDTO() {
 	}
@@ -40,9 +40,17 @@ public class TrailDTO {
 		this.name = name;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	@Override
 	public String toString() {
-		return "Trail {geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name + "}";
+		return "Trail {geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name + ", description =" + description + "}";
 	}
 	
 }

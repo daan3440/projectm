@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import pvt73app.API.APIRetriever;
 import pvt73app.API.TrailAttributeDTO;
+import pvt73app.API.TrailDTO;
 
 public class APIRetrieverTest {
 	private APIRetriever api = new APIRetriever();
@@ -25,27 +26,42 @@ public class APIRetrieverTest {
 		attributeGroupNames.add("Relaterade länkar");
 	}
 
-//	@Test
-//	public void getTrailAttributeTest() {
-//		createAttributeGroupNamesList();
-//		List<TrailAttributeDTO> attributes = api.getTrailAttributes(KARRTORPSSPÅRET_ID); 
-//		
-//		for(TrailAttributeDTO a : attributes) {
-//			assertTrue(attributeGroupNames.contains(a.getGroup()));
-//		}
-//		
-//		assertEquals(13, attributes.size());
-//	}
+	@Test
+	public void getTrailAttributeTest() {
+		createAttributeGroupNamesList();
+		List<TrailAttributeDTO> attributes = api.getTrailAttributes(KARRTORPSSPÅRET_ID); 
+		
+		for(TrailAttributeDTO a : attributes) {
+			assertTrue(attributeGroupNames.contains(a.getGroup()));
+		}
+		
+		assertEquals(13, attributes.size());
+	}
 
-//	@Test
-//	public void getTrailsTest() {
-//		List<TrailDTO> trails = api.getTrails(); 
-//		
-////		for(TrailDTO t : trails)
-////			System.out.println(t);
-//		
-//		assertEquals(20, trails.size());
-//	}
+	@Test
+	public void gettrailstest() {
+		List<TrailDTO> trails = api.getTrails();
+
+		
+		for(TrailDTO t : trails) {
+			assertNull(t.getDescription());
+		}
+
+		assertEquals(20, trails.size());
+	}
+	
+	@Test
+	public void getTrailsWithDescriptionTest() {
+		List<TrailDTO> trails = api.getTrailsWithDescription();
+		
+		for(TrailDTO t : trails) {
+			assertNotNull(t.getDescription());
+		}
+		
+		assertEquals(20, trails.size());
+	}
+	
+	
 
 	@Test
 	public void getStringIdTest() {
