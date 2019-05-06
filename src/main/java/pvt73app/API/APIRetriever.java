@@ -21,14 +21,14 @@ public class APIRetriever {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
-	public List<TrailDTO> getTrails() {
+	public List<TrailDTO> getTrailsFromApi() {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<TrailDTO[]> responseEntity = restTemplate.getForEntity(TRAILS_URL, TrailDTO[].class);
 		TrailDTO[] objects = responseEntity.getBody();
 		return Arrays.asList(objects);
 	}
 
-	public List<TrailAttributeDTO> getTrailAttributes(String id) {
+	public List<TrailAttributeDTO> getTrailAttributesFromApi(String id) {
 		List<TrailAttributeDTO> attributes = new ArrayList<>();
 		String url = String.format(TRAIL_URL, id);
 		RestTemplate restTemplate = new RestTemplate();
@@ -59,11 +59,12 @@ public class APIRetriever {
 		return attributes;
 	}
 	
-	public List<TrailDTO> getTrailsWithDescription(){
-		List<TrailDTO> trails = getTrails();
+	public List<TrailDTO> getTrails(){
+		List<TrailDTO> trails = getTrailsFromApi();
 		
 		for(TrailDTO t : trails) {
-			List<TrailAttributeDTO> attributes = getTrailAttributes(t.getId());
+			List<TrailAttributeDTO> attributes = getTrailAttributesFromApi(t.getId());
+			t.setLocation(getTrailLocationFromApi(t.getId()));
 			
 			for(TrailAttributeDTO attribute: attributes) {
 				if(isAttributeDescription(attribute) && attribute instanceof TrailAttributeStringValueDTO) {
@@ -85,7 +86,7 @@ public class APIRetriever {
 		return attribute.getGroup().equals("Beskrivning av enheten") && attribute.getId().equals("ShortDescription") && attribute.getName().equals("Introduktion");
 	}
 	
-	public String getTrailLocation(String trailId) {
+	public String getTrailLocationFromApi(String trailId) {
 		String locationUrl = String.format(TRAIL_LOCATION, trailId);
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<TrailLocationDTO[]> responseEntity = restTemplate.getForEntity(locationUrl, TrailLocationDTO[].class);

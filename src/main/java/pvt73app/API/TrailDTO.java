@@ -12,6 +12,7 @@ public class TrailDTO {
 	@JsonProperty("Name")
 	private String name;
 	private String description;
+	private String location;
 	
 	public TrailDTO() {
 	}
@@ -48,9 +49,17 @@ public class TrailDTO {
 		this.description = description;
 	}
 	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
-		return "Trail {geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name + ", description =" + description + "}";
+		return "TrailDTO [geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name
+				+ ", description=" + description + ", location=" + location + "]";
 	}
-	
 }

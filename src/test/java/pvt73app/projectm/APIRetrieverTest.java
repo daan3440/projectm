@@ -42,7 +42,7 @@ public class APIRetrieverTest {
 			"8ddac468-da8a-4b3c-9051-0a1425533e9b",
 			"d68206fd-e5ea-4aef-875a-d13c40949796"
 	};
-	
+
 	private String[] trailLocations = {
 			"Skarpnäck",
 			"Skärholmen",
@@ -66,6 +66,11 @@ public class APIRetrieverTest {
 			"Enskede-Årsta-Vantör"
 	};
 
+	private void createTrailLocationByIdMap() {
+		for(int i = 0; i<trailIds.length;i++) {
+			trailLocationNameById.put(trailIds[i], trailLocations[i]);
+		}
+	}
 	private void createAttributeGroupNamesList() {
 		attributeGroupNames.add("Kontaktpersoner");
 		attributeGroupNames.add("Beskrivning av enheten");
@@ -78,7 +83,7 @@ public class APIRetrieverTest {
 	@Test
 	public void getTrailAttributeTest() {
 		createAttributeGroupNamesList();
-		List<TrailAttributeDTO> attributes = api.getTrailAttributes(KARRTORPSSPÅRET_ID); 
+		List<TrailAttributeDTO> attributes = api.getTrailAttributesFromApi(KARRTORPSSPÅRET_ID); 
 		
 		for(TrailAttributeDTO a : attributes) {
 			assertTrue(attributeGroupNames.contains(a.getGroup()));
@@ -89,7 +94,7 @@ public class APIRetrieverTest {
 
 	@Test
 	public void gettrailstest() {
-		List<TrailDTO> trails = api.getTrails();
+		List<TrailDTO> trails = api.getTrailsFromApi();
 
 		
 		for(TrailDTO t : trails) {
@@ -101,7 +106,7 @@ public class APIRetrieverTest {
 	
 	@Test
 	public void getTrailsWithDescriptionTest() {
-		List<TrailDTO> trails = api.getTrailsWithDescription();
+		List<TrailDTO> trails = api.getTrails();
 		
 		for(TrailDTO t : trails) {
 			assertNotNull(t.getDescription());
@@ -123,7 +128,17 @@ public class APIRetrieverTest {
 		
 		
 		for(int i =0; i<trailIds.length;i++) {
-			assertEquals(trailLocations[i], api.getTrailLocation(trailIds[i]));
+			assertEquals(trailLocations[i], api.getTrailLocationFromApi(trailIds[i]));
+		}
+	}
+	
+	@Test
+	public void getLocationFromTrailTest() {
+		createTrailLocationByIdMap();
+		List<TrailDTO> trails = api.getTrails();
+		
+		for(TrailDTO t: trails) {
+			assertEquals(trailLocationNameById.get(t.getId()), t.getLocation());
 		}
 	}
 
