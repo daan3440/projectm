@@ -9,12 +9,15 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pvt73app.API.TrailDTO;
+import pvt73app.API.TrailLocationDTO;
 
 public class APIRetriever {
 	private static final String API_KEY = "7ea7ade21aae4f7d89073bb8047d07cf";
 	private static final String ENDPOINT = "http://api.stockholm.se/ServiceGuideService/";
 	private static final String TRAILS_URL = ENDPOINT + "ServiceUnitTypes/a4116a6a-af53-4672-b492-01d7adeae987/ServiceUnits/json?apikey="+API_KEY;
 	private static final String TRAIL_URL = ENDPOINT + "ServiceUnits/%s/Attributes/json?apikey=" + API_KEY; 
+	private static final String TRAIL_LOCATION = ENDPOINT + "ServiceUnits/%s/GeographicalAreas/json?apikey=" + API_KEY;
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -80,6 +83,27 @@ public class APIRetriever {
 	
 	private boolean isAttributeDescription(TrailAttributeDTO attribute) {
 		return attribute.getGroup().equals("Beskrivning av enheten") && attribute.getId().equals("ShortDescription") && attribute.getName().equals("Introduktion");
+	}
+	
+	public String getTrailLocation(String trailId) {
+		String locationUrl = String.format(TRAIL_LOCATION, trailId);
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<TrailLocationDTO[]> responseEntity = restTemplate.getForEntity(locationUrl, TrailLocationDTO[].class);
+		TrailLocationDTO[] locations = responseEntity.getBody();
+		
+		String locationName = "";
+		
+		for(TrailLocationDTO location : locations) {
+			if(locations.length > 1) {
+				if(location.getId() != 0) {
+					locationName = location.getName();
+				}
+			} else {
+				locationName = location.getName();
+			}
+		}
+		
+		return locationName;
 	}
 
 	public String getIdUrl(String id) {
