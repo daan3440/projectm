@@ -3,6 +3,7 @@ package pvt73app.MYSQL;
 import org.hibernate.internal.IteratorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,19 +28,19 @@ public class SQLController {
 	private TrailRepository trailRepository;
 	@Autowired
 	private GroupRepository groupRepository; // TODO: Make a new controller for different 
-											 //repos so that we won't get cluttered code
-	
+	//repos so that we won't get cluttered code
+
 	@GetMapping("/hejSQL")
 	public String hejSQL() {
 		return "SQL up!";
 	}
-	
+
 	@GetMapping(path="/addUser")
 	public @ResponseBody String addNewUser (@RequestParam(required = true) String fname,
-											@RequestParam(required = true) String lname, 
-											@RequestParam(required = true) String email,
-											String photo) {
-		
+			@RequestParam(required = true) String lname, 
+			@RequestParam(required = true) String email,
+			String photo) {
+
 		System.out.println("" + fname + " " + lname + " " + email);
 
 		User n = new User();
@@ -61,7 +64,7 @@ public class SQLController {
 			@RequestParam(required = true) double time,
 			@RequestParam(required = true) int length,
 			String comment) {
-				
+
 		UserRuns ur = new UserRuns();
 		ur.setUserId(uid);
 		ur.setTid(tid);
@@ -77,10 +80,10 @@ public class SQLController {
 		userRunsRepository.save(ur);
 		return "Saved";
 	}
-	
+
 	@GetMapping(path="/addGroup")
 	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname,
-											Integer uid) {
+			Integer uid) {
 
 		Group group = new Group();
 		group.setGroupname(groupname);
@@ -91,24 +94,22 @@ public class SQLController {
 		}
 		return "Saved";
 	}
-//	@PostMapping
+	//	@PostMapping
 	private @ResponseBody String addNewGroupConnect(int uid, int gid) {
 		UserGroupConnect ugc = new UserGroupConnect();
 		ugc.setUid(uid);
 		ugc.setGid(gid);
 		return "Success";
-		}
-	
+	}
+
 	@GetMapping(path="/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
-	
-	@GetMapping(path="/allTrails")
-	public @ResponseBody Iterable<Trail> getAllTrails() {
+
+	@GetMapping(path="/allTrailsXML")
+	public @ResponseBody Iterable<Trail> getAllTrailsXML() {
 		return trailRepository.findAll(); 
-				
-//				.findAll();
 	}
 
 	@GetMapping(path="/getUser")
@@ -116,15 +117,25 @@ public class SQLController {
 		if (id != null) {
 			return userRepository.findById(id);
 		} 
-//		else if (name != null) {
-//			return userRepository.findByName(name).stream().findAny();
-//		}
+		//		else if (name != null) {
+		//			return userRepository.findByName(name).stream().findAny();
+		//		}
 		else {
 			return Optional.empty();
 		}
-		
+
 	}
 
+//	@Transactional
+	@GetMapping(path="/getTrails")
+	public @ResponseBody List<Trail> getAllTrails() {		 
+		Iterable<Trail> trails = trailRepository.findAll();
+		List<Trail> trailList = new ArrayList<>();
+		trails.forEach(trailList::add);
+		Trail item = trailList.get(0);
+		//	    System.out.println("Print da lista a: " +trailList.toString());
+		return trailList;
+	}
 
 
 }

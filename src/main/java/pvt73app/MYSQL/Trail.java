@@ -70,4 +70,12 @@ public class Trail {
 	public void setImage(String image){
 		this.image=image;
 	}
+
+	@Override
+	public String toString() {
+		return "Trail [id=" + id + ", trailname=" + trailname + ", geoLocationX=" + geoLocationX + ", geoLocationY="
+				+ geoLocationY + ", description=" + description + ", location=" + location + ", image=" + image + "]";
+	}
+	
+	
 }
