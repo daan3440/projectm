@@ -35,6 +35,7 @@ public class APIRetriever {
 		for (JsonNode node : objects) {
 			JsonNode value = node.get("Value");
 
+			
 			try {
 				if (value != null) {
 					if (value.isTextual()) {
