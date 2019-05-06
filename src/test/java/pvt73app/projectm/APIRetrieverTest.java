@@ -10,6 +10,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import pvt73app.API.APIRetriever;
+import pvt73app.API.GeographicalPositionDTO;
 import pvt73app.API.TrailAttributeDTO;
 import pvt73app.API.TrailDTO;
 
@@ -93,7 +94,7 @@ public class APIRetrieverTest {
 	}
 
 	@Test
-	public void gettrailstest() {
+	public void getTrailsFromApitest() {
 		List<TrailDTO> trails = api.getTrailsFromApi();
 
 		
@@ -105,13 +106,21 @@ public class APIRetrieverTest {
 	}
 	
 	@Test
-	public void getTrailsWithDescriptionTest() {
+	public void getTrailsWithGeoPosLocationDescriptionTest() {
+		createTrailLocationByIdMap();
 		List<TrailDTO> trails = api.getTrails();
+		List<String> geoLocs = new ArrayList<>(); 
 		
 		for(TrailDTO t : trails) {
 			assertNotNull(t.getDescription());
+			assertEquals(trailLocationNameById.get(t.getId()), t.getLocation());
+			geoLocs.add(t.getName() + " X " + t.getGeoLocationX() + " Y " + t.getGeoLocationY());
 		}
 		
+		
+		for(String s : geoLocs) {
+			System.out.println(s);
+		}
 		assertEquals(20, trails.size());
 	}
 	
@@ -140,6 +149,27 @@ public class APIRetrieverTest {
 		for(TrailDTO t: trails) {
 			assertEquals(trailLocationNameById.get(t.getId()), t.getLocation());
 		}
+	}
+	
+	@Test
+	public void geoLocationXYTest() {
+		//Kärrtopsspårets position används: "X":6576068,"Y":1632168
+		//WGS84 pos long 59,284853 lat 18,124188, från https://rl.se/rt90
+		long karrtorpRT90X = 6576068;
+		long karrtorpRT90Y = 1632168;
+		double karrtorpWGS84X = 59.284853;
+		double karrtorpWGS84Y = 18.124188;
+		TrailDTO trail = new TrailDTO();
+		GeographicalPositionDTO geoPos = new GeographicalPositionDTO();
+		geoPos.setX(karrtorpRT90X);
+		geoPos.setY(karrtorpRT90Y);
+		trail.setGeographicalPosition(geoPos);
+		trail.createWGS84GeoLocation();
+		
+		//0.00001d är felmarginalen på testen eftersom double inte kan testas om de matchar fullt ut.
+		//Felmarginalen är tagen från Goobers koordinattest.
+		assertEquals(karrtorpWGS84X, trail.getGeoLocationX(),0.00001d);
+		assertEquals(karrtorpWGS84Y, trail.getGeoLocationY(),0.00001d);
 	}
 
 }

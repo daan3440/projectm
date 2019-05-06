@@ -3,6 +3,9 @@ package pvt73app.API;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import pvt73app.Coordinates.RT90Position;
+import pvt73app.Coordinates.WGS84Position;
+
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class TrailDTO {
 	@JsonProperty("GeographicalPosition")
@@ -13,6 +16,8 @@ public class TrailDTO {
 	private String name;
 	private String description;
 	private String location;
+	private double geoLocationX;
+	private double geoLocationY;
 	
 	public TrailDTO() {
 	}
@@ -55,6 +60,23 @@ public class TrailDTO {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	
+	public void createWGS84GeoLocation() {
+		if(geographicalPosition != null) {
+			RT90Position rt90pos = new RT90Position(geographicalPosition.getX(), geographicalPosition.getY());
+			WGS84Position wgs84pos = rt90pos.toWGS84();
+			geoLocationX = wgs84pos.getLatitude();
+			geoLocationY = wgs84pos.getLongitude();
+		}
+	}
+	
+	public double getGeoLocationX() {
+		return geoLocationX;
+	}
+
+	public double getGeoLocationY() {
+		return geoLocationY;
 	}
 
 	@Override

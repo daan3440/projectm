@@ -65,6 +65,7 @@ public class APIRetriever {
 		for(TrailDTO t : trails) {
 			List<TrailAttributeDTO> attributes = getTrailAttributesFromApi(t.getId());
 			t.setLocation(getTrailLocationFromApi(t.getId()));
+			t.createWGS84GeoLocation();
 			
 			for(TrailAttributeDTO attribute: attributes) {
 				if(isAttributeDescription(attribute) && attribute instanceof TrailAttributeStringValueDTO) {
