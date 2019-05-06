@@ -25,27 +25,27 @@ public class Trail {
 	public void setTrailID(String tid){
 		this.id=tid;
 	}
-	public String getTrailname(){
+	public String getTrailName(){
 		return trailname;
 	}
 
-	public void setTrailname(String trailname){
+	public void setTrailName(String trailname){
 		this.trailname=trailname;
 	}
 
-	public double getGeolocationx(){
+	public double getGeoLocationX(){
 		return geoLocationX;
 	}
 
-	public void setGeolocationx(double geoLocationX){
+	public void setGeoLocationX(double geoLocationX){
 		this.geoLocationX=geoLocationX;
 	}
 
-	public double getGeolocationy(){
+	public double getGeoLocationY(){
 		return geoLocationY;
 	}
 
-	public void setGeolocationy(double geoLocationY){
+	public void setGeoLocationY(double geoLocationY){
 		this.geoLocationY=geoLocationY;
 	}
 
