@@ -8,21 +8,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping
 public class SQLController {
 
-//	@Autowired
+	@Autowired
 	private UserRepository userRepository;
-//	@Autowired
+	@Autowired
 	private UserRunsRepository userRunsRepository;
-//	@Autowired
+	@Autowired
 	private TrailRepository trailRepository;
-//	@Autowired
+	@Autowired
 	private GroupRepository groupRepository; // TODO: Make a new controller for different 
 											 //repos so that we won't get cluttered code
 	

@@ -1,4 +1,4 @@
-package pvt73app.projectm;
+package pvt73app;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
