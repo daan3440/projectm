@@ -1,4 +1,4 @@
-package com.pvt73app.MYSQL;
+package pvt73app.MYSQL;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +21,7 @@ public class EditSQLTest {
 
 	@Test
 	public void createUserRun() {
-		sc.addUserRun(0, null, null, 0, 0, null);
+//		sc.addUserRun(0, null, null, 0, 0, null);
 //		assertEquals();
 	}
 	@Test
