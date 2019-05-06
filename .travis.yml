@@ -19,6 +19,7 @@ before_deploy:
  # - mv .gitignore.production .gitignore
 deploy:
  provider: azure_web_apps
+ slot: pvt73back-pvt73back2
  verbose: true
  skip_cleanup: true
 
