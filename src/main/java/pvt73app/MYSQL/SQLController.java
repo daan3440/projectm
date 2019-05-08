@@ -24,7 +24,7 @@ public class SQLController {
 	@Autowired
 	private TrailRepository trailRepository;
 	@Autowired
-	private GroupRepository groupRepository; // TODO: Make a new controller for different 
+	private UserGroupRepository groupRepository; // TODO: Make a new controller for different 
 											 //repos so that we won't get cluttered code
 	
 	@GetMapping("/hejSQL")
@@ -82,8 +82,8 @@ public class SQLController {
 	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname,
 											Integer uid) {
 
-		Group group = new Group();
-		group.setGroupname(groupname);
+		Usergroup group = new Usergroup();
+		group.setGroupName(groupname);
 		groupRepository.save(group);
 		if(group != null) {
 			System.out.println("tmp not Null");
@@ -102,6 +102,11 @@ public class SQLController {
 	@GetMapping(path="/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
+	}
+
+	@GetMapping(path="/allGroups")
+	public @ResponseBody Iterable<Usergroup> getAllGroups() {
+		return groupRepository.findAll();
 	}
 	
 	@GetMapping(path="/allTrails")
