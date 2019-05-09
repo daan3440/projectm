@@ -157,7 +157,7 @@ public class SQLController {
 			trail.setDescription(dto.getDescription());
 			trail.setLocation(dto.getLocation());
 			trail.setImage(dto.getImageId());
-			trails.add(trail);
+			trails.add(trail); 
 		}
 		return trails;
 	}
