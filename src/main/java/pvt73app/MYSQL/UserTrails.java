@@ -9,9 +9,7 @@ import javax.persistence.Id;
 
 public class UserTrails {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
-    
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tid;
 
 	public int getTid(){
