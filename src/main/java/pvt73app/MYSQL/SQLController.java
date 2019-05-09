@@ -107,8 +107,8 @@ public class SQLController {
 		return userRepository.findAll();
 	}
 
-	@GetMapping(path="/allTrailsXML")
-	public @ResponseBody Iterable<Trail> getAllTrailsXML() {
+	@GetMapping(path="/allTrails")
+	public @ResponseBody Iterable<Trail> getAllTrails() {
 		return trailRepository.findAll(); 
 	}
 
@@ -128,7 +128,7 @@ public class SQLController {
 
 //	@Transactional
 	@GetMapping(path="/getTrails")
-	public @ResponseBody List<Trail> getAllTrails() {		 
+	public @ResponseBody List<Trail> getAllTrailsList() {		 
 		Iterable<Trail> trails = trailRepository.findAll();
 		List<Trail> trailList = new ArrayList<>();
 		trails.forEach(trailList::add);
