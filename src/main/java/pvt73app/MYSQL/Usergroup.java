@@ -7,18 +7,18 @@ import javax.persistence.Id;
 
 @Entity // This tells Hibernate to make a table out of this class
 
-public class Group {
+public class Usergroup {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String groupname;
 
-	public String getGroupname(){
+	public String getGroupName(){
 		return groupname;
 	}
 
-	public void setGroupname(String groupname){
+	public void setGroupName(String groupname){
 		this.groupname=groupname;
 	}
 
