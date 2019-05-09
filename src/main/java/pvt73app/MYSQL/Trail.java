@@ -5,25 +5,28 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import pvt73app.API.TrailDTO;
+
 @Entity // This tells Hibernate to make a table out of this class
 
 public class Trail {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private String id;
+    private int id;
+    private String trailid;
 	private String trailname;
 	private double geoLocationX;
 	private double geoLocationY;
 	private String description;
 	private String location;
 	private String image;
-
+	
 	public String getTrailID(){
-		return id;
+		return trailid;
 	}
 	
 	public void setTrailID(String tid){
-		this.id=tid;
+		this.trailid=tid;
 	}
 	public String getTrailName(){
 		return trailname;
@@ -73,7 +76,7 @@ public class Trail {
 
 	@Override
 	public String toString() {
-		return "Trail [id=" + id + ", trailname=" + trailname + ", geoLocationX=" + geoLocationX + ", geoLocationY="
+		return "Trail [id=" + trailid + ", trailname=" + trailname + ", geoLocationX=" + geoLocationX + ", geoLocationY="
 				+ geoLocationY + ", description=" + description + ", location=" + location + ", image=" + image + "]";
 	}
 	

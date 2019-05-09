@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import pvt73app.API.APIRetriever;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping
 public class SQLController {
-
+	private APIRetriever api = new APIRetriever();
+	
+	
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -135,6 +139,11 @@ public class SQLController {
 		Trail item = trailList.get(0);
 		//	    System.out.println("Print da lista a: " +trailList.toString());
 		return trailList;
+	}
+	
+	@GetMapping(path="/addFirstTrail")
+	public void addTrail() {
+		trailRepository.save(api.getFirstTrailToDb());
 	}
 
 

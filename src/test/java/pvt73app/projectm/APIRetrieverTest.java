@@ -8,11 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import pvt73app.API.APIRetriever;
 import pvt73app.API.GeographicalPositionDTO;
 import pvt73app.API.TrailAttributeDTO;
 import pvt73app.API.TrailDTO;
+import pvt73app.MYSQL.SQLController;
+import pvt73app.MYSQL.Trail;
+import pvt73app.MYSQL.TrailRepository;
 
 public class APIRetrieverTest {
 	private APIRetriever api = new APIRetriever();
