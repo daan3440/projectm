@@ -19,11 +19,6 @@ public class User {
 	public Integer getId() {
 		return id;
 	}
-	//TODO SLå ihop names - MEN bara just nu...
-	
-//	public String getName() {		
-//		return fname +" "+ lname;
-//	}
 
 	public String getFname(){
 		return fname;
