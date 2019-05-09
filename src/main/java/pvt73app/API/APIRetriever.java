@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pvt73app.API.TrailDTO;
@@ -22,10 +24,10 @@ public class APIRetriever {
 	private static final String TRAIL_LOCATION = ENDPOINT + "ServiceUnits/%s/GeographicalAreas/json?apikey=" + API_KEY;
 
 	private ObjectMapper mapper = new ObjectMapper();
-
+	
 	public List<TrailDTO> getTrailsFromApi() {
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<TrailDTO[]> responseEntity = restTemplate.getForEntity(TRAILS_URL, TrailDTO[].class);
+		ResponseEntity<TrailDTO[]> responseEntity = restTemplate.getForEntity(TRAILS_URL, TrailDTO[].class);	
 		TrailDTO[] objects = responseEntity.getBody();
 		return Arrays.asList(objects);
 	}
@@ -53,8 +55,8 @@ public class APIRetriever {
 						attributes.add(mapper.treeToValue(node, TrailAttributeValuesArrayDTO.class));
 					}
 				}
-			} catch (Exception e) {
-
+			} catch (JsonProcessingException e) {
+				// fel bör loggas
 			}
 		}
 
