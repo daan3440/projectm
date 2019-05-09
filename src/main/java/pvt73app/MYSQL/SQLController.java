@@ -161,6 +161,11 @@ public class SQLController {
 		}
 		return trails;
 	}
+	
+	@GetMapping(path="/getTrailById/{id}")
+	public @ResponseBody Optional<Trail> getTrailById(@PathVariable("id") int id) {
+		return trailRepository.findById(id);
+	}
 
 	@GetMapping(path = "/dropTrail/{id}")
 	public @ResponseBody String dropTrailById(@PathVariable("id") int id) {
