@@ -25,23 +25,23 @@ import pvt73app.MYSQL.UserRuns;
 
 	
 	 
-	@RunWith(SpringRunner.class)
-	@SpringBootTest
+//	@RunWith(SpringRunner.class)
+//	@SpringBootTest
 	public class SQLTest {
-	  @Autowired
-	  TrailRepository tr;
-	  @Test
-	  @Transactional
-	  public void testFindAll() {
-	    Iterable<Trail> trails = tr.findAll();
-	    List<Trail> trailList = new ArrayList<>();
-	    trails.forEach(trailList::add);
-	    assertEquals(2, trailList.size());
-	    Trail item = trailList.get(0);
-	    System.out.println("Print da lista a: " +trailList.toString());
-	    assertEquals("101", item.getTrailID());
-	   
-	  }
+//	  @Autowired
+//	  TrailRepository tr;
+//	  @Test
+//	  @Transactional
+//	  public void testFindAll() {
+//	    Iterable<Trail> trails = tr.findAll();
+//	    List<Trail> trailList = new ArrayList<>();
+//	    trails.forEach(trailList::add);
+//	    assertEquals(2, trailList.size());
+//	    Trail item = trailList.get(0);
+//	    System.out.println("Print da lista a: " +trailList.toString());
+//	    assertEquals("101", item.getTrailID());
+//	   
+//	  }
 	
 
 

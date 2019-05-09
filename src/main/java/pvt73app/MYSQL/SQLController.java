@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class SQLController {
 	public String hejSQL() {
 		return "SQL up!";
 	}
-
+	
 	@GetMapping(path = "/addUser")
 	public @ResponseBody String addNewUser(@RequestParam(required = true) String fname,
 			@RequestParam(required = true) String lname, @RequestParam(required = true) String email, String photo) {
@@ -102,17 +103,19 @@ public class SQLController {
 		ugc.setGid(gid);
 		return "Success";
 	}
-
+	
+	@CrossOrigin
 	@GetMapping(path = "/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
-
+	
+	@CrossOrigin
 	@GetMapping(path = "/allTrails")
 	public @ResponseBody Iterable<Trail> getAllTrails() {
 		return trailRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping(path = "/getUser")
 	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
 			@RequestParam(required = false) Integer id) {
@@ -128,7 +131,8 @@ public class SQLController {
 
 	}
 
-//	@Transactional
+	@Transactional
+	@CrossOrigin
 	@GetMapping(path = "/getTrails")
 	public @ResponseBody List<Trail> getAllTrailsList() {
 		Iterable<Trail> trails = trailRepository.findAll();
@@ -161,7 +165,7 @@ public class SQLController {
 		}
 		return trails;
 	}
-	
+	@CrossOrigin
 	@GetMapping(path="/getTrailById/{id}")
 	public @ResponseBody Optional<Trail> getTrailById(@PathVariable("id") int id) {
 		return trailRepository.findById(id);
@@ -173,7 +177,7 @@ public class SQLController {
 
 		return id + " is GONE";
 	}
-
+	
 	@GetMapping(path = "/dropUser/{id}")
 	public @ResponseBody String dropUserById(@PathVariable("id") int id) {
 		userRepository.deleteById(id);

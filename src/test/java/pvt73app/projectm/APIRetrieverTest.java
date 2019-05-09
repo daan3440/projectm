@@ -122,9 +122,9 @@ public class APIRetrieverTest {
 		}
 		
 		
-		for(String s : trailStrings) {
-			System.out.println(s);
-		}
+//		for(String s : trailStrings) {
+//			System.out.println(s);
+//		}
 		assertEquals(20, trails.size());
 	}
 	
