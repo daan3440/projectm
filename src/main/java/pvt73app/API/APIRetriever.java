@@ -118,21 +118,6 @@ public class APIRetriever {
 		return locationName;
 	}
 
-	public Trail getFirstTrailToDb() {
-		List<TrailDTO> trails = getTrails();
-		TrailDTO first = trails.get(0);
-		Trail trail = new Trail();
-		trail.setTrailID(first.getId());
-		trail.setTrailName(first.getName());
-		trail.setGeoLocationX(first.getGeoLocationX());
-		trail.setGeoLocationY(first.getGeoLocationY());
-		trail.setDescription(first.getDescription());
-		trail.setLocation(first.getLocation());
-		trail.setImage(first.getImageId());
-
-		return trail;
-	}
-
 	public String getIdUrl(String id) {
 		return String.format(TRAIL_URL, id);
 	}
