@@ -11,6 +11,7 @@ public class UserTrails {
     @Id
 //    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tid;
+    private int uid;
 
 	public int getTid(){
 		return tid;
@@ -18,5 +19,13 @@ public class UserTrails {
 
 	public void setTid(int tid){
 		this.tid=tid;
+	}
+	
+	public int getUid(){
+		return uid;
+	}
+	
+	public void setUid(int uid){
+		this.uid=uid;
 	}
 }
