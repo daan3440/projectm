@@ -20,6 +20,7 @@ public class TrailDTO {
 	private String location;
 	private double geoLocationX;
 	private double geoLocationY;
+	private String imageId;
 	
 	public TrailDTO() {
 	}
@@ -80,11 +81,19 @@ public class TrailDTO {
 	public double getGeoLocationY() {
 		return geoLocationY;
 	}
+	
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
 
 	@Override
 	public String toString() {
 		return "TrailDTO [geographicalPosition=" + geographicalPosition + ", id=" + id + ", name=" + name
 				+ ", description=tillfälligt bortagen" + ", location=" + location + ", geoLocationX=" + geoLocationX
-				+ ", geoLocationY=" + geoLocationY + "]";
+				+ ", geoLocationY=" + geoLocationY + "imageId=" +imageId + "]";
 	}
 }
