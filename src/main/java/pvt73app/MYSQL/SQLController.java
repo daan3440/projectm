@@ -194,6 +194,14 @@ public class SQLController {
 	}
 	
 	@CrossOrigin
+	@GetMapping(path = "/allTrailsSortedByLocation")
+	public @ResponseBody Iterable<Trail> getAllTrailsByGeoLocation(@RequestParam double lat, @RequestParam double lon) {
+		List<Trail> trails = getAllTrailsList();
+		trails.sort(new TrailsGeoLocationComparator(lat, lon));
+		return trails;
+	}
+	
+	@CrossOrigin
 	@GetMapping(path = "/getUser")
 	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
 			@RequestParam(required = false) Integer id) {
