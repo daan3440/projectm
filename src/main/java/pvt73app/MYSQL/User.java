@@ -14,6 +14,7 @@ public class User {
 	private String fname;
 	private String lname;
 	private String email;
+	private String psw;
 	private String photo;
 
 	public Integer getId() {
@@ -40,7 +41,14 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String email){
+	public void setEmail(String psw){
+		this.psw=psw;
+	}
+	public String getPassword(){
+		return psw;
+	}
+	
+	public void setPassword(String email){
 		this.email=email;
 	}
 

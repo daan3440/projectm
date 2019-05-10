@@ -6,11 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity // This tells Hibernate to make a table out of this class
-public class ChallengeConverter {
+public class ChallengeConnector {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int caid;
 	private int cid;
+	private int tid;
 
 	public int getCaid(){
 		return caid;
@@ -26,5 +27,12 @@ public class ChallengeConverter {
 
 	public void setCid(int cid){
 		this.cid=cid;
+	}
+	public int getTid(){
+		return tid;
+	}
+	
+	public void setTid(int tid){
+		this.tid=tid;
 	}
 }
