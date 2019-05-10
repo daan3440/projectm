@@ -8,25 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
-
+// This tells Hibernate to make a table out of this class
+@Entity(name = "userruns")
 public class UserRuns {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private int uid;
-	private String tid;
-	private Timestamp date;
+	private int tid;
+	private Date date;
 	private double time;
 	private int length;
 	private String comment;
 
-	public String getTid(){
+	public int getTid(){
 		return tid;
 	}
 
 	
-	public void setTid(String tid){
+	public void setTid(int tid){
 		this.tid=tid;
 	}
 	
@@ -38,11 +38,11 @@ public class UserRuns {
 		this.uid=uid;
 	}
 	
-	public Timestamp getDate(){
+	public Date getDate(){
 		return date;
 	}
 	
-	public void setDate(Timestamp date){
+	public void setDate(Date date){
 		this.date=date;
 	}
 	

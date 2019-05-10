@@ -7,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
+// This tells Hibernate to make a table out of this class
+@Entity(name = "challengeattributes")
 public class ChallengeAttributes {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -17,6 +18,10 @@ public class ChallengeAttributes {
 	private Date startdate;
 	private Date enddate;
 	private boolean complete;
+	
+
+	public ChallengeAttributes() {
+	}
 
 	public ChallengeAttributes(Date time, int count, Date startdate, Date enddate) {
 		if(time != null)
@@ -40,6 +45,13 @@ public class ChallengeAttributes {
 	public void setCount(int count){
 		this.count=count;
 	}
+	public Date getTime(){
+		return time;
+	}
+	
+	public void setTime(Date time){
+		this.time= time;
+	}
 
 	public Date getStartdate(){
 		return startdate;
@@ -56,4 +68,13 @@ public class ChallengeAttributes {
 	public void setEnddate(Date enddate){
 		this.enddate=enddate;
 	}
+	public boolean getComplete(){
+		return complete;
+	}
+	
+	public void setComplete(boolean complete){
+		this.complete=complete;
+	}
+
+	
 }

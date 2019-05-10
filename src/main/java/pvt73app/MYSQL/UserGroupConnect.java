@@ -3,7 +3,8 @@ package pvt73app.MYSQL;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
+// This tells Hibernate to make a table out of this class
+@Entity(name = "usergroupconnect")
 public class UserGroupConnect {
 	@Id
 	private Integer uid;

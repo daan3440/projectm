@@ -7,8 +7,8 @@ import javax.persistence.Id;
 
 import pvt73app.API.TrailDTO;
 
-@Entity // This tells Hibernate to make a table out of this class
-
+// This tells Hibernate to make a table out of this class
+@Entity(name = "trail")
 public class Trail {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
