@@ -68,6 +68,12 @@ public class HelloRestController {
 		return new HejBomb(name);
 	}
 	
+	@CrossOrigin
+	@GetMapping("/geoLoc") 
+	public GeoLocText GeoLoc(@RequestParam double lat, @RequestParam double lon){
+		return new GeoLocText("lat = " + lat + " long = " + lon);
+	}
+	
 //	@RequestMapping("/sayHello")
 //	public class IndexController  {
 //
