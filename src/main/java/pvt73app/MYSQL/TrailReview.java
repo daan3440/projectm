@@ -1,5 +1,7 @@
 package pvt73app.MYSQL;
 
+import java.sql.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,9 +13,10 @@ public class TrailReview {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tid;
+    private int uid;
 	private String review;
 	private int rating;
-	private java.util.Date date;
+	private Date date;
 	private String title;
 
 	public int getTid(){
@@ -22,6 +25,13 @@ public class TrailReview {
 
 	public void setTid(int tid){
 		this.tid=tid;
+	}
+	public int getUid(){
+		return uid;
+	}
+	
+	public void setUid(int uid){
+		this.uid=uid;
 	}
 
 	public String getReview(){
@@ -44,7 +54,7 @@ public class TrailReview {
 		return date;
 	}
 
-	public void setDate(java.util.Date date){
+	public void setDate(Date date){
 		this.date=date;
 	}
 
