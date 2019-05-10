@@ -55,6 +55,8 @@ public class SQLController {
 	private GroupChallengeConnectRepository groupChallengeConnectRepository;
 	@Autowired
 	private TrailReviewRepository trailReviewRepository;
+	@Autowired
+	private UserTrailsRepository userTrailsRepository;
 
 	@GetMapping("/hejSQL")
 	public String hejSQL() {
@@ -474,6 +476,73 @@ public class SQLController {
 		UserRuns userRuns = userRunsRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
 		userRunsRepository.delete(userRuns);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	
+	//UserTrails START
+	@GetMapping("/userTrails")
+	public List<UserTrails> getAllUserTrails() {
+		return (List<UserTrails>) userTrailsRepository.findAll();
+	}
+	
+	@GetMapping("/userTrails/{uid}")
+	public ResponseEntity<UserTrails> getUserTrailsById(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserTrails userTrails = userTrailsRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
+		return ResponseEntity.ok().body(userTrails);
+	}
+	
+	@RequestMapping(value = "/addUserTrails", method = RequestMethod.GET)
+	public @ResponseBody String createUserTrails(
+			@RequestParam(required = true) int tid,
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = false) boolean favourite
+			){
+		UserTrails userTrails = new UserTrails();
+		userTrails.setTid(tid);
+		userTrails.setUid(uid);
+		userTrails.setFavourite(favourite);
+		
+		userTrailsRepository.save(userTrails);
+		return "Saved"; 
+	}
+	
+	//    @PutMapping("/updateuserTrails/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuserTrails?
+	@RequestMapping(value = "/updateUserTrails", method = RequestMethod.GET)
+	public @ResponseBody String updateUserTrails(
+			@RequestParam(required = true) int tid,
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = false) boolean favourite
+			) throws ResourceNotFoundException {
+		UserTrails userTrails = userTrailsRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
+		
+		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
+
+		
+		if(userTrails.getFavourite() == true)
+			userTrails.setFavourite(true);
+		else
+			userTrails.setFavourite(favourite);
+		
+		final UserTrails updatedUserTrails = userTrailsRepository.save(userTrails);
+		if(updatedUserTrails != null)
+			return "Updated";
+		else
+			return "No update";
+	}
+	
+	//    @DeleteMapping("/userTrailsattributes/{id}")
+	@RequestMapping(value = "/deleteUserTrails/{id}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserTrails(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		UserTrails userTrails = userTrailsRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
+		userTrailsRepository.delete(userTrails);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
