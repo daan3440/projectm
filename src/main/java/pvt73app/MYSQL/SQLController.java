@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pvt73app.API.APIRetriever;
 import pvt73app.API.TrailDTO;
-import pvt73app.Coordinates.DistanceGPSCoordinates;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -194,8 +193,6 @@ public class SQLController {
 		return trailRepository.findAll();
 	}
 	
-	
-	
 	@CrossOrigin
 	@GetMapping(path = "/allTrailsSortedByLocation")
 	public @ResponseBody Iterable<Trail> getAllTrailsByGeoLocation(@RequestParam double lat, @RequestParam double lon) {
@@ -274,16 +271,6 @@ public class SQLController {
 		return id + " is GONE";
 	}
 	
-	@GetMapping(path = "/getDistance")
-	public @ResponseBody double getDistance(@RequestParam (required = true) double x1,
-			@RequestParam (required = true) double y1, @RequestParam(required = true) double x2,
-			@RequestParam(required = true) double y2) {
-		double dist = ( DistanceGPSCoordinates.gpsDistance(x1, y1, x2, y2)); //in meters
-		dist /= 10;
-		dist = (int) dist;
-		return dist / 100;
-
-	}
 	
 
 }
