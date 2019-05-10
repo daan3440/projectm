@@ -7,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
+// This tells Hibernate to make a table out of this class
+@Entity(name = "challengeattributes")
 public class ChallengeAttributes {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
