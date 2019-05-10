@@ -192,6 +192,7 @@ public class SQLController {
 	public @ResponseBody Iterable<Trail> getAllTrails() {
 		return trailRepository.findAll();
 	}
+	
 	@CrossOrigin
 	@GetMapping(path = "/getUser")
 	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
@@ -208,10 +209,11 @@ public class SQLController {
 
 	}
 
-	@Transactional
-	@CrossOrigin
-	@GetMapping(path = "/getTrails")
-	public @ResponseBody List<Trail> getAllTrailsList() {
+//	@Transactional
+//	@CrossOrigin
+//	@GetMapping(path = "/getTrails")
+//	public @ResponseBody List<Trail> getAllTrailsList() {
+		public List<Trail> getAllTrailsList() {
 		Iterable<Trail> trails = trailRepository.findAll();
 		List<Trail> trailList = new ArrayList<>();
 		trails.forEach(trailList::add);
