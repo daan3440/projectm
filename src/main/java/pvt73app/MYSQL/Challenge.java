@@ -14,7 +14,14 @@ public class Challenge {
 	private int caid;
 	private String name;
 
-	public int getId(){
+	
+//    public Challenge(int tid, int caid, String name) {
+//        this.tid = tid;
+//        this.caid = caid;
+//        this.name = name;
+//    }
+    
+	public Integer getId(){
 		return id;
 	}
 
@@ -40,5 +47,10 @@ public class Challenge {
 
 	public void setName(String name){
 		this.name=name;
+	}
+
+	@Override
+	public String toString() {
+		return "Challenge [id=" + id + ", tid=" + tid + ", caid=" + caid + ", name=" + name + "]";
 	}
 }
