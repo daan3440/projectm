@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import java.time.LocalDateTime;
+
 // This tells Hibernate to make a table out of this class
 @Entity(name = "trailreview")
 public class TrailReview {
@@ -16,7 +18,7 @@ public class TrailReview {
     private int uid;
 	private String review;
 	private int rating;
-	private Date date;
+	private LocalDateTime date;
 	private String title;
 
 	public int getTid(){
@@ -50,12 +52,12 @@ public class TrailReview {
 		this.rating=rating;
 	}
 
-	public java.util.Date getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 
-	public void setDate(Date date){
-		this.date=date;
+	public void setDate(LocalDateTime cdate){
+		this.date=cdate;
 	}
 
 	public String getTitle(){

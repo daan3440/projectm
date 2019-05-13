@@ -1,6 +1,8 @@
 package pvt73app.MYSQL;
 
 import java.sql.Date;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,17 +15,17 @@ public class ChallengeAttributes {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private Date time;
+	private BigInteger time;
 	private int count;
-	private Date startdate;
-	private Date enddate;
+	private LocalDateTime startdate;
+	private LocalDateTime enddate;
 	private boolean complete;
 	
 
 	public ChallengeAttributes() {
 	}
 
-	public ChallengeAttributes(Date time, int count, Date startdate, Date enddate) {
+	public ChallengeAttributes(BigInteger time, int count, LocalDateTime startdate, LocalDateTime enddate) {
 		if(time != null)
 			this.time = time;
 		//Notera -1 för inte definierad
@@ -45,27 +47,27 @@ public class ChallengeAttributes {
 	public void setCount(int count){
 		this.count=count;
 	}
-	public Date getTime(){
+	public BigInteger getTime(){
 		return time;
 	}
 	
-	public void setTime(Date time){
+	public void setTime(BigInteger time){
 		this.time= time;
 	}
 
-	public Date getStartdate(){
+	public LocalDateTime getStartdate(){
 		return startdate;
 	}
 
-	public void setStartdate(Date startdate){
+	public void setStartdate(LocalDateTime startdate){
 		this.startdate=startdate;
 	}
 
-	public Date getEnddate(){
+	public LocalDateTime getEnddate(){
 		return enddate;
 	}
 
-	public void setEnddate(Date enddate){
+	public void setEnddate(LocalDateTime enddate){
 		this.enddate=enddate;
 	}
 	public boolean getComplete(){

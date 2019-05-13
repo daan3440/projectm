@@ -1,7 +1,8 @@
 package pvt73app.MYSQL;
 
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.math.BigInteger;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,8 +17,8 @@ public class UserRuns {
     private int id;
     private int uid;
 	private int tid;
-	private Date date;
-	private double time;
+	private LocalDateTime date;
+	private BigInteger time;
 	private int length;
 	private String comment;
 
@@ -38,19 +39,19 @@ public class UserRuns {
 		this.uid=uid;
 	}
 	
-	public Date getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 	
-	public void setDate(Date date){
-		this.date=date;
+	public void setDate(LocalDateTime cdate){
+		this.date=cdate;
 	}
 	
-	public double getTime(){
+	public BigInteger getTime(){
 		return time;
 	}
 	
-	public void setTime(double time){
+	public void setTime(BigInteger time){
 		this.time=time;
 	}
 	
