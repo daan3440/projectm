@@ -49,6 +49,10 @@ public class SQLController {
 	@Autowired
 	private UserGroupRepository userGroupRepository; 
 	@Autowired
+	private UserAdminGroupRepository userAdminGroupRepository; 
+	@Autowired
+	private UserGroupConnectRepo userGroupConnectRepository; 
+	@Autowired
 	private ChallengeRepository challengeRepository;
 	@Autowired
 	private ChallengeAttributesRepository challengeAttributesRepository;
@@ -505,7 +509,7 @@ public class SQLController {
 	}
 
 	//UserGroup START
-	@GetMapping("/userGroup")
+	@GetMapping("/allUserGroups")
 	public List<UserGroup> getAllUserGroup() {
 		return (List<UserGroup>) userGroupRepository.findAll();
 	}
@@ -520,13 +524,19 @@ public class SQLController {
 	
 	@RequestMapping(value = "/addUserGroup", method = RequestMethod.GET)
 	public @ResponseBody String createUserGroup(
-			@RequestParam(required = true) String name
-			){
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) String groupname
+			) throws ResourceNotFoundException{
+		User user = userRepository.findById(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + uid));
 		UserGroup userGroup = new UserGroup();
-		userGroup.setGroupName(name);		
-		userGroupRepository.save(userGroup);
+		userGroup.setGroupName(groupname);
+		UserGroup saved = userGroupRepository.save(userGroup);
+		createUserGroupConnect(uid,saved.getID());
+		createUserAdminGroup(uid,saved.getID());
 		return "Saved"; 
 	}
+
 	
 	//    @PutMapping("/updateuserGroup/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserGroup?
@@ -553,6 +563,99 @@ public class SQLController {
 		UserGroup userGroup = userGroupRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
 		userGroupRepository.delete(userGroup);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	//UserGroupConnect START
+	@GetMapping("/userGroupConnect")
+	public List<UserGroupConnect> getAllUserGroupConnect() {
+		return (List<UserGroupConnect>) userGroupConnectRepository.findAll();
+	}
+	
+	@GetMapping("/userGroupConnect/{uid}")
+	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
+		return ResponseEntity.ok().body(userGroupConnect);
+	}
+	
+	@RequestMapping(value = "/addUserGroupConnect", method = RequestMethod.GET)
+	public @ResponseBody String createUserGroupConnect(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			) throws ResourceNotFoundException{
+		User user = userRepository.findById(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + uid));
+		UserGroupConnect userGroupConnect = new UserGroupConnect();
+		userGroupConnect.setUid(uid);
+		userGroupConnect.setGid(gid);
+		userGroupConnectRepository.save(userGroupConnect);
+		return "Saved"; 
+	}
+	
+	//    @DeleteMapping("/userGroupConnectattributes/{id}")
+	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		userGroupConnectRepository.delete(userGroupConnect);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	
+	//UserAdminGroup START
+	@GetMapping("/userAdminGroup")
+	public List<UserAdminGroup> getAllUserAdminGroup() {
+		return (List<UserAdminGroup>) userAdminGroupRepository.findAll();
+	}
+	
+	@GetMapping("/userAdminGroup/{uid}")
+	public ResponseEntity<UserAdminGroup> getUserAdminGroupById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - id :: " + id));
+		return ResponseEntity.ok().body(userAdminGroup);
+	}
+	
+	@RequestMapping(value = "/addUserAdminGroup", method = RequestMethod.GET)
+	public @ResponseBody String createUserAdminGroup(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			){
+		UserAdminGroup userAdminGroup = new UserAdminGroup();
+		userAdminGroup.setUid(uid);		
+		userAdminGroup.setGid(gid);		
+		userAdminGroupRepository.save(userAdminGroup);
+		return "Saved"; 
+	}
+	
+	//    @PutMapping("/updateuserAdminGroup/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuserAdminGroup?
+	@RequestMapping(value = "/updateUserAdminGroup", method = RequestMethod.GET)
+	public @ResponseBody String updateUserAdminGroup(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			) throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - uid :: " + uid));		
+		final UserAdminGroup updatedUserAdminGroup = userAdminGroupRepository.save(userAdminGroup);
+		if(updatedUserAdminGroup != null)
+			return "Updated";
+		else
+			return "No update";
+	}
+	
+	//    @DeleteMapping("/userAdminGroupattributes/{id}")
+	@RequestMapping(value = "/deleteUserAdminGroup/{uid}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserAdminGroup(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		userAdminGroupRepository.delete(userAdminGroup);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
