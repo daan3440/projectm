@@ -434,7 +434,7 @@ public class SQLController {
 		leaderboard.sort(new Comparator<UserRuns>() {
 			@Override
 			public int compare(UserRuns ur1, UserRuns ur2) {
-			return ur1.getTime().subtract(ur2.getTime()).intValue();
+				return ur1.getTime().subtract(ur2.getTime()).intValue();
 			}
 		});
 		return leaderboard;
@@ -513,7 +513,7 @@ public class SQLController {
 	public List<UserGroup> getAllUserGroup() {
 		return (List<UserGroup>) userGroupRepository.findAll();
 	}
-	
+
 	@GetMapping("/userGroup/{uid}")
 	public ResponseEntity<UserGroup> getUserGroupById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -521,7 +521,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserGroup finns inte - id :: " + id));
 		return ResponseEntity.ok().body(userGroup);
 	}
-	
+
 	@RequestMapping(value = "/addUserGroup", method = RequestMethod.GET)
 	public @ResponseBody String createUserGroup(
 			@RequestParam(required = true) int uid,
@@ -537,7 +537,7 @@ public class SQLController {
 		return "Saved"; 
 	}
 
-	
+
 	//    @PutMapping("/updateuserGroup/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserGroup?
 	@RequestMapping(value = "/updateUserGroup", method = RequestMethod.GET)
@@ -555,7 +555,7 @@ public class SQLController {
 		else
 			return "No update";
 	}
-	
+
 	//    @DeleteMapping("/userGroupattributes/{id}")
 	@RequestMapping(value = "/deleteUserGroup/{id}", method = RequestMethod.GET)
 	public Map<String, Boolean> deleteUserGroup(@PathVariable(value = "id") int id)
@@ -572,7 +572,7 @@ public class SQLController {
 	public List<UserGroupConnect> getAllUserGroupConnect() {
 		return (List<UserGroupConnect>) userGroupConnectRepository.findAll();
 	}
-	
+
 	@GetMapping("/userGroupConnect/{uid}")
 	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
@@ -580,7 +580,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
 		return ResponseEntity.ok().body(userGroupConnect);
 	}
-	
+
 	@RequestMapping(value = "/addUserGroupConnect", method = RequestMethod.GET)
 	public @ResponseBody String createUserGroupConnect(
 			@RequestParam(required = true) int uid,
@@ -594,7 +594,7 @@ public class SQLController {
 		userGroupConnectRepository.save(userGroupConnect);
 		return "Saved"; 
 	}
-	
+
 	//    @DeleteMapping("/userGroupConnectattributes/{id}")
 	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
 	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid") int uid)
@@ -606,13 +606,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
+
 	//UserAdminGroup START
 	@GetMapping("/userAdminGroup")
 	public List<UserAdminGroup> getAllUserAdminGroup() {
 		return (List<UserAdminGroup>) userAdminGroupRepository.findAll();
 	}
-	
+
 	@GetMapping("/userAdminGroup/{uid}")
 	public ResponseEntity<UserAdminGroup> getUserAdminGroupById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -620,7 +620,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - id :: " + id));
 		return ResponseEntity.ok().body(userAdminGroup);
 	}
-	
+
 	@RequestMapping(value = "/addUserAdminGroup", method = RequestMethod.GET)
 	public @ResponseBody String createUserAdminGroup(
 			@RequestParam(required = true) int uid,
@@ -632,7 +632,7 @@ public class SQLController {
 		userAdminGroupRepository.save(userAdminGroup);
 		return "Saved"; 
 	}
-	
+
 	//    @PutMapping("/updateuserAdminGroup/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserAdminGroup?
 	@RequestMapping(value = "/updateUserAdminGroup", method = RequestMethod.GET)
@@ -648,7 +648,7 @@ public class SQLController {
 		else
 			return "No update";
 	}
-	
+
 	//    @DeleteMapping("/userAdminGroupattributes/{id}")
 	@RequestMapping(value = "/deleteUserAdminGroup/{uid}", method = RequestMethod.GET)
 	public Map<String, Boolean> deleteUserAdminGroup(@PathVariable(value = "uid") int uid)
@@ -660,7 +660,7 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
+
 	//UserTrails START
 	@GetMapping("/userTrails")
 	public List<UserTrails> getAllUserTrails() {
@@ -728,70 +728,110 @@ public class SQLController {
 		return response;
 	}
 
+	//User START
+	@GetMapping("/allUser")
+	public List<User> getAllUser() {
+		return (List<User>) userRepository.findAll();
+	}
 
-
-	@GetMapping(path = "/addUser")
-	public @ResponseBody String addNewUser(@RequestParam(required = true) String fname,
-			@RequestParam(required = true) String lname, @RequestParam(required = true) String email, String photo) {
-
-		//		System.out.println("" + fname + " " + lname + " " + email);
-
-		User n = new User();
-		n.setFname(fname);
-		n.setLname(lname);
-		n.setEmail(email);
+	@GetMapping("/user/{uid}")
+	public ResponseEntity<User> getUserById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		return ResponseEntity.ok().body(user);
+	}
+	//User
+	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+	public @ResponseBody String addNewUser(
+			@RequestParam(required = true) String fname,
+			@RequestParam(required = true) String lname,
+			@RequestParam(required = true) String email,
+			@RequestParam(required = false) String tagline,
+			@RequestParam(required = false) String photo
+			) {
+		User user = new User();
+		user.setFname(fname);
+		user.setLname(lname);
+		user.setEmail(email);
+		user.setEmail(tagline);
+		if (tagline != null)
+			user.setTagline(photo);
+		else {
+			String tmp = "";
+			user.setTagline(tmp);
+		}
 		if (photo != null)
-			n.setPhoto(photo);
+			user.setPhoto(photo);
 		else {
 			String tmp = "no picture";
-			n.setPhoto(tmp);
+			user.setPhoto(tmp);
 		}
-		userRepository.save(n);
+		userRepository.save(user);
 		return "Saved";
 	}
+	//    @PutMapping("/updateuser/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuser?
+	@RequestMapping(value = "/updateUser", method = RequestMethod.GET)
+	public @ResponseBody String updateUser(
+			@RequestParam(required = true) int id,
+			@RequestParam(required = false) String fname,
+			@RequestParam(required = false) String lname,
+			@RequestParam(required = false) String email,
+			@RequestParam(required = false) String tagline,
+			@RequestParam(required = false) String photo
+			) throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		
+		if (fname != null)
+			user.setTagline(fname);
+		if (lname != null)
+			user.setTagline(lname);
+		if (email != null)
+			user.setTagline(email);
+		if (tagline != null)
+			user.setTagline(tagline);
+		if (photo != null)
+			user.setPhoto(photo);
 
-	//	// /addUserRun?uid=1333&tid=namnppåspår&
-	//	@GetMapping(path = "/addUserRun")
-	//	public @ResponseBody String addUserRun(@RequestParam(required = true) int uid,
-	//			@RequestParam(required = true) String tid, @RequestParam(required = true) Timestamp date,
-	//			@RequestParam(required = true) double time, @RequestParam(required = true) int length, String comment) {
+		final User updatedUser = userRepository.save(user);
+		if(updatedUser != null)
+			return "Updated";
+		else
+			return "No update";
+	}
+
+	//    @DeleteMapping("/userattributes/{id}")
+	@RequestMapping(value = "/deleteUser/{id}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		userRepository.delete(user);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	//	@GetMapping(path = "/addGroup")
+	//	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname, Integer uid) {
 	//
-	//		UserRuns ur = new UserRuns();
-	//		ur.setUserId(uid);
-	//		ur.setTid(tid);
-	//		ur.setDate(date);
-	//		ur.setTime(time);
-	//		ur.setLength(length);
-	//		if (comment != null)
-	//			ur.setComment(comment);
-	//		else {
-	//			String tmp = " ";
-	//			ur.setComment(tmp);
+	//		UserGroup group = new UserGroup();
+	//		group.setGroupName(groupname);
+	//		userGroupRepository.save(group);
+	//		if (group != null) {
+	//			System.out.println("tmp not Null");
+	//			addNewGroupConnect(group.getID(), uid);
 	//		}
-	//		userRunsRepository.save(ur);
 	//		return "Saved";
 	//	}
-
-	@GetMapping(path = "/addGroup")
-	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname, Integer uid) {
-
-		UserGroup group = new UserGroup();
-		group.setGroupName(groupname);
-		userGroupRepository.save(group);
-		if (group != null) {
-			System.out.println("tmp not Null");
-			addNewGroupConnect(group.getID(), uid);
-		}
-		return "Saved";
-	}
-
-	// @PostMapping
-	private @ResponseBody String addNewGroupConnect(int uid, int gid) {
-		UserGroupConnect ugc = new UserGroupConnect();
-		ugc.setUid(uid);
-		ugc.setGid(gid);
-		return "Success";
-	}
+	//
+	//	private @ResponseBody String addNewGroupConnect(int uid, int gid) {
+	//		UserGroupConnect ugc = new UserGroupConnect();
+	//		ugc.setUid(uid);
+	//		ugc.setGid(gid);
+	//		return "Success";
+	//	}
 
 	@CrossOrigin
 	@GetMapping(path = "/allUsers")

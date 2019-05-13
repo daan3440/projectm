@@ -1,6 +1,9 @@
 Profil interface:
 
 getProfil(userId); -> namn, tagline, bild, antal post, spår, badges.
+Aktivitet (post):
+
+review
 getAktiviteterNära(pos);
 getMyPost(userid); -> ens post, det användaren har gjort
 getMytFavTrail(userid); -> favoritspåren
