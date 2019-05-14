@@ -3,15 +3,15 @@ package pvt73app.MYSQL;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
-
+// This tells Hibernate to make a table out of this class
+@Entity(name = "usertrails")
 public class UserTrails {
-    
 
 	@Id
 //    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tid;
     private int uid;
+    private boolean favourite;
 
 	public int getTid(){
 		return tid;
@@ -27,5 +27,13 @@ public class UserTrails {
 	
 	public void setUid(int uid){
 		this.uid=uid;
+	}
+	
+	public boolean getFavourite(){
+		return favourite;
+	}
+	
+	public void setFavourite(boolean favourite){
+		this.favourite=favourite;
 	}
 }
