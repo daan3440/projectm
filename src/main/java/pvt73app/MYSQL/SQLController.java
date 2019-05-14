@@ -740,6 +740,7 @@ public class SQLController {
 		return id + " is GONE";
 	}
 	
+	@CrossOrigin
 	@GetMapping(path = "/getDistance")
 	public @ResponseBody double getDistance(@RequestParam (required = true) double x1,
 			@RequestParam (required = true) double y1, @RequestParam(required = true) double x2,
