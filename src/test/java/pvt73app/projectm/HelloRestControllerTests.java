@@ -24,5 +24,11 @@ public class HelloRestControllerTests {
 	public void jsonTestTest() {
 		assertEquals("test", hrc.hejBomb("test").getName());
 	}
+	
+	@Test
+	public void loginTest() {
+		assertTrue(hrc.login("test", "hej"));
+		assertFalse(hrc.login("test", "fel lösen"));
+	}
 
 }

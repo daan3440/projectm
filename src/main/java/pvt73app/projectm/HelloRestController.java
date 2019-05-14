@@ -13,67 +13,74 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 public class HelloRestController {
-	
+
 //	@RequestMapping("/error")
 //	public String error() {
 //		return "Något är fel din pajas.";
 //	}
-	
+
 //	@RequestMapping("/sayHello")
 //	public String greeting(
 //			@RequestParam(value="name", defaultValue="World") String name){
 //		//String name now has the value from the url
 //		return String.format("Hello, %s.", name);
 //	}
-	
-	//https://pvt.dsv.su.se/ptvxx/sayHello?Moon
-	@RequestMapping(
-			value="/sayHello/{name}",method=RequestMethod.GET)
-			public String greeting(@PathVariable String name) { //String name now has the value from the url
+
+	// https://pvt.dsv.su.se/ptvxx/sayHello?Moon
+	@RequestMapping(value = "/sayHello/{name}", method = RequestMethod.GET)
+	public String greeting(@PathVariable String name) { // String name now has the value from the url
 		return String.format("Hello, %s.", name);
-			}
-	
+	}
+
 	@GetMapping("/sayHelloSimple")
 	public String greeting() {
 		return "Hello Pvt73";
 	}
-	
+
 	@GetMapping("/hello")
-    public Collection<String> sayHello() {
-        return IntStream.range(0, 10)
-          .mapToObj(i -> "Hello number " + i)
-          .collect(Collectors.toList());
-    }
-	
+	public Collection<String> sayHello() {
+		return IntStream.range(0, 10).mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
+	}
+
 	@GetMapping("/time")
-    public String time() {
-            return Calendar.getInstance().getTime().toString();
-    }
+	public String time() {
+		return Calendar.getInstance().getTime().toString();
+	}
 
 	@GetMapping("/sayHelloBomb")
 	public String hejBomb() {
 		return "Hej Bomben 2";
 	}
+
 	@GetMapping("/sayHelloBomb3")
 	public String hejBomb3() {
 		return "Hej Bomben 3";
 	}
-	
+
 	@CrossOrigin
-	@RequestMapping("/hejBomb") 
-	public HejBomb hejBomb(@RequestParam(required=false, defaultValue="TEST") String name){
+	@RequestMapping("/hejBomb")
+	public HejBomb hejBomb(@RequestParam(required = false, defaultValue = "TEST") String name) {
 		return new HejBomb(name);
 	}
-	
+
 	@CrossOrigin
-	@GetMapping("/geoLoc") 
-	public GeoLocText GeoLoc(@RequestParam double lat, @RequestParam double lon){
-		return new GeoLocText("lat = " + lat + " long = " + lon);
+	@GetMapping("/geoLoc")
+	public GeoLocText GeoLoc(@RequestParam double lat, @RequestParam double lon) {
+		return new GeoLocText("lat = " + lat + " long = " + lon, true);
 	}
-	
+
+	@CrossOrigin
+	@GetMapping("/login")
+	public boolean login(@RequestParam String userName, @RequestParam String password) {
+		if(password.equals("hej")){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 //	@RequestMapping("/sayHello")
 //	public class IndexController  {
 //
@@ -96,6 +103,5 @@ public class HelloRestController {
 //		}
 //		
 //	}
-	
-}
 
+}
