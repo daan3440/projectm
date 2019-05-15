@@ -383,7 +383,7 @@ public class SQLController {
 			@RequestParam(required = false) String date,
 			@RequestParam(required = false) String title
 			) throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid)
+		TrailReview trailReview = trailReviewRepository.findByTid(tid) // TODO: Should it not be uid and tid together that fins the correct rewiev and not only the tid? signed: Antin
 				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
 
 		LocalDateTime cdate = LocalDateTime.parse(date);
@@ -467,7 +467,7 @@ public class SQLController {
 	@RequestMapping(value = "/updateUserRun", method = RequestMethod.GET)
 	public @ResponseBody String updateUserRuns(
 			@RequestParam(required = true) int id,
-			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int uid, 	// TODO: Never used? signed: Anton
 			@RequestParam(required = true) int tid,
 			@RequestParam(required = false)String date,
 			@RequestParam(required = false) BigInteger time,
@@ -823,18 +823,12 @@ public class SQLController {
 
 	@CrossOrigin
 	@GetMapping(path = "/getUser")
-	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
-			@RequestParam(required = false) Integer id) {
-		if (id != null) {
-			return userRepository.findById(id);
-		}
-		// else if (name != null) {
-		// return userRepository.findByName(name).stream().findAny();
-		// }
-		else {
-			return Optional.empty();
-		}
-
+	public @ResponseBody ResponseEntity<User> getUser(@RequestParam(required = true) Integer id)
+			throws ResourceNotFoundException {
+		User user = userRepository.findById(id).orElseThrow(() -> 
+												new ResourceNotFoundException("User finns inte - id :: " + id));
+		
+		return ResponseEntity.ok().body(user);
 	}
 
 	//	@Transactional
