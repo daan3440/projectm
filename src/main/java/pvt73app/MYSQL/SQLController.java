@@ -514,7 +514,7 @@ public class SQLController {
 		return (List<UserGroup>) userGroupRepository.findAll();
 	}
 
-	@GetMapping("/userGroup/{uid}")
+	@GetMapping("/userGroup/{id}")
 	public ResponseEntity<UserGroup> getUserGroupById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		UserGroup userGroup = userGroupRepository.findById(id)
@@ -734,7 +734,7 @@ public class SQLController {
 		return (List<User>) userRepository.findAll();
 	}
 
-	@GetMapping("/user/{uid}")
+	@GetMapping("/user/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		User user = userRepository.findById(id)
@@ -832,6 +832,14 @@ public class SQLController {
 	//		ugc.setGid(gid);
 	//		return "Success";
 	//	}
+	
+	@GetMapping("/trail/{id}")
+	public ResponseEntity<Trail> getTrailsById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Trail trail = trailRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Trail finns inte - id :: " + id));
+		return ResponseEntity.ok().body(trail);
+	}
 
 	@CrossOrigin
 	@GetMapping(path = "/allUsers")
@@ -860,7 +868,8 @@ public class SQLController {
 
 	@CrossOrigin
 	@GetMapping(path = "/getUser")
-	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
+	public @ResponseBody Optional<User> getUser(
+			@RequestParam(required = false) String name,
 			@RequestParam(required = false) Integer id) {
 		if (id != null) {
 			return userRepository.findById(id);

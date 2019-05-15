@@ -22,6 +22,9 @@ public class UserRuns {
 	private int length;
 	private String comment;
 
+	public int getId(){
+		return id;
+	}
 	public int getTid(){
 		return tid;
 	}
@@ -70,4 +73,5 @@ public class UserRuns {
 	public void setComment(String comment){
 		this.comment=comment;
 	}
+
 }
