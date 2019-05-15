@@ -1,6 +1,6 @@
 Profil interface:
 
-getProfil(userId); -> namn, tagline, bild, antal post, spår, badges.
+getProfil(userId); -> namn, tagline, bild, antal post, spår, badges. // Maybe make a view for this one as it would make it easier as it is a non trivial task.
 getAktiviteterNära(pos);
 getMyPost(userid); -> ens post, det användaren har gjort
 getMytFavTrail(userid); -> favoritspåren KLAR!
