@@ -383,7 +383,7 @@ public class SQLController {
 			@RequestParam(required = false) String date,
 			@RequestParam(required = false) String title
 			) throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid)
+		TrailReview trailReview = trailReviewRepository.findByTid(tid) // TODO: Should it not be uid and tid together that fins the correct rewiev and not only the tid? signed: Antin
 				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
 
 		LocalDateTime cdate = LocalDateTime.parse(date);
@@ -467,7 +467,7 @@ public class SQLController {
 	@RequestMapping(value = "/updateUserRun", method = RequestMethod.GET)
 	public @ResponseBody String updateUserRuns(
 			@RequestParam(required = true) int id,
-			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int uid, 	// TODO: Never used? signed: Anton
 			@RequestParam(required = true) int tid,
 			@RequestParam(required = false)String date,
 			@RequestParam(required = false) BigInteger time,
@@ -668,10 +668,16 @@ public class SQLController {
 	}
 
 	@GetMapping("/userTrails/{uid}")
-	public ResponseEntity<UserTrails> getUserTrailsById(@PathVariable(value = "uid") int uid)
+	public ResponseEntity<List<UserTrails>> getUserTrailsById(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
-		UserTrails userTrails = userTrailsRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid); //TODO: Find a way to make it check with a orElseThrow
+		return ResponseEntity.ok().body(userTrails);
+	}
+
+	@GetMapping("/usersFavTrails/{uid}")
+	public ResponseEntity<List<UserTrails>> getUsersFavoriteTrails(@PathVariable(value = "uid") int uid) throws ResourceNotFoundException {
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid);
+		userTrails.removeIf(ut -> ut.getFavourite() == false);
 		return ResponseEntity.ok().body(userTrails);
 	}
 
@@ -698,18 +704,15 @@ public class SQLController {
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = false) boolean favourite
 			) throws ResourceNotFoundException {
-		UserTrails userTrails = userTrailsRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid);
+		userTrails.removeIf(ur -> ur.getTid() != tid);
 
 		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
 
-
-		if(userTrails.getFavourite() == true)
-			userTrails.setFavourite(true);
-		else
-			userTrails.setFavourite(favourite);
-
-		final UserTrails updatedUserTrails = userTrailsRepository.save(userTrails);
+		userTrails.forEach(ur -> {
+			ur.setFavourite(favourite); // TODO: Think this is how it should look? signed: Anton
+		});
+		final Iterable<UserTrails> updatedUserTrails = userTrailsRepository.saveAll(userTrails);
 		if(updatedUserTrails != null)
 			return "Updated";
 		else
