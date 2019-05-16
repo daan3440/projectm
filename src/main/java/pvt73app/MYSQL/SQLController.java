@@ -845,6 +845,15 @@ public class SQLController {
 		return ResponseEntity.ok().body(trail);
 	}
 
+	@GetMapping(path = "/addFavourite")
+	public ResponseEntity<List<UserTrails>> addFavourite(@PathVariable(required = true) Integer uid,
+												   		 @PathVariable(required = true) Integer tid) {
+		List<UserTrails> tempList = userTrailsRepository.findByUid(uid);
+		tempList.removeIf(ut -> ut.getTid() != tid);
+		tempList.forEach(ut -> ut.setFavourite(true));
+		return ResponseEntity.ok().body(tempList);
+	}
+
 	@CrossOrigin
 	@GetMapping(path = "/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
