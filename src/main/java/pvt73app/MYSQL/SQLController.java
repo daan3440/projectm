@@ -2,6 +2,7 @@ package pvt73app.MYSQL;
 
 import org.hibernate.internal.IteratorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +23,12 @@ import pvt73app.API.APIRetriever;
 import pvt73app.API.TrailDTO;
 import pvt73app.Coordinates.DistanceGPSCoordinates;
 
-import java.sql.Date;
+//import java.sql.Date;
+import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +48,11 @@ public class SQLController {
 	@Autowired
 	private TrailRepository trailRepository;
 	@Autowired
-	private UserGroupRepository groupRepository; 
+	private UserGroupRepository userGroupRepository; 
+	@Autowired
+	private UserAdminGroupRepository userAdminGroupRepository; 
+	@Autowired
+	private UserGroupConnectRepo userGroupConnectRepository; 
 	@Autowired
 	private ChallengeRepository challengeRepository;
 	@Autowired
@@ -57,6 +65,7 @@ public class SQLController {
 	private TrailReviewRepository trailReviewRepository;
 	@Autowired
 	private UserTrailsRepository userTrailsRepository;
+
 
 	@GetMapping("/hejSQL")
 	public String hejSQL() {
@@ -143,14 +152,17 @@ public class SQLController {
 	@RequestMapping(value = "/addChallengeAttributes", method = RequestMethod.GET)
 	public @ResponseBody String createChallengeAttributes(
 			@RequestParam(required = false) Integer count,
-			@RequestParam(required = false) Date time,
-			@RequestParam(required = true) Date startdate,
-			@RequestParam(required = true) Date enddate){
+			@RequestParam(required = false) BigInteger time,
+			@RequestParam(required = true) String startdate,
+			@RequestParam(required = true) String enddate){
+
+		LocalDateTime cstartdate = LocalDateTime.parse(startdate);
+		LocalDateTime cenddate = LocalDateTime.parse(enddate);
 		ChallengeAttributes challengeAttributes = new ChallengeAttributes();
 		challengeAttributes.setTime(time);
 		challengeAttributes.setCount(count);
-		challengeAttributes.setStartdate(startdate);
-		challengeAttributes.setEnddate(enddate);
+		challengeAttributes.setStartdate(cstartdate);
+		challengeAttributes.setEnddate(cenddate);
 		challengeAttributes.setComplete(false);
 		challengeAttributesRepository.save(challengeAttributes);
 		return "Saved"; 
@@ -162,22 +174,23 @@ public class SQLController {
 	public @ResponseBody String updateChallengeAttributes(
 			@RequestParam(required = true) int id,
 			@RequestParam(required = false) Integer count,
-			@RequestParam(required = false) Date time,
-			@RequestParam(required = false) Date startdate,
-			@RequestParam(required = false) Date enddate,
+			@RequestParam(required = false) BigInteger time,
+			@RequestParam(required = false) String startdate,
+			@RequestParam(required = false) String enddate,
 			@RequestParam(required = false) boolean complete)  throws ResourceNotFoundException {
 		ChallengeAttributes challengeAttributes = challengeAttributesRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttributes finns inte - id :: " + id));
 
-		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
+		LocalDateTime cstartdate = LocalDateTime.parse(startdate);
+		LocalDateTime cenddate = LocalDateTime.parse(enddate);
 		if(time != null)
 			challengeAttributes.setTime(time);
 		if(count != null)
 			challengeAttributes.setCount(count);
 		if(startdate != null)
-			challengeAttributes.setStartdate(startdate);
+			challengeAttributes.setStartdate(cstartdate);
 		if(enddate != null)
-			challengeAttributes.setEnddate(enddate);
+			challengeAttributes.setEnddate(cenddate);
 		if(challengeAttributes.getComplete() == true)
 			challengeAttributes.setComplete(true);
 		else
@@ -345,14 +358,15 @@ public class SQLController {
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = false)String review,
 			@RequestParam(required = false)int rating,
-			@RequestParam(required = false)Date date,
+			@RequestParam(required = false)String date,
 			@RequestParam(required = false)String title){
+		LocalDateTime cdate = LocalDateTime.parse(date);
 		TrailReview trailReview = new TrailReview();
 		trailReview.setTid(tid);
 		trailReview.setUid(uid);
 		trailReview.setReview(review);
 		trailReview.setRating(rating);
-		trailReview.setDate(date);
+		trailReview.setDate(cdate);
 		trailReview.setTitle(title);
 
 		trailReviewRepository.save(trailReview);
@@ -367,19 +381,19 @@ public class SQLController {
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = false) String review,
 			@RequestParam(required = false) Integer rating,
-			@RequestParam(required = false) Date date,
+			@RequestParam(required = false) String date,
 			@RequestParam(required = false) String title
 			) throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid)
+		TrailReview trailReview = trailReviewRepository.findByTid(tid) // TODO: Should it not be uid and tid together that fins the correct rewiev and not only the tid? signed: Antin
 				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
 
-		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
+		LocalDateTime cdate = LocalDateTime.parse(date);
 		if(review != null)
 			trailReview.setReview(review);
 		if(rating != null)
 			trailReview.setRating(rating);
 		if(date!= null)
-			trailReview.setDate(date);
+			trailReview.setDate(cdate);
 		if(title != null)
 			trailReview.setTitle(title);
 
@@ -414,20 +428,33 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserRuns finns inte - id :: " + id));
 		return ResponseEntity.ok().body(userRuns);
 	}
+	@CrossOrigin
+	@GetMapping("/leaderboard/{tid}")
+	public @ResponseBody Iterable<UserRuns> getUserRunsByTid(@PathVariable(value = "tid") int tid){
+		List<UserRuns> leaderboard = (List<UserRuns>) userRunsRepository.findByTid(tid);
+		leaderboard.sort(new Comparator<UserRuns>() {
+			@Override
+			public int compare(UserRuns ur1, UserRuns ur2) {
+				return ur1.getTime().subtract(ur2.getTime()).intValue();
+			}
+		});
+		return leaderboard;
+	}
 
-	@RequestMapping(value = "/addUserRuns", method = RequestMethod.GET)
+	@RequestMapping(value = "/addUserRun", method = RequestMethod.GET)
 	public @ResponseBody String createUserRuns(
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = true) int tid,
-			@RequestParam(required = true) Date date,
-			@RequestParam(required = true) double time,
+			@RequestParam(required = true) String date,
+			@RequestParam(required = true) BigInteger time,
 			@RequestParam(required = true) int length,
 			@RequestParam(required = false) String comment
 			){
+		LocalDateTime cdate = LocalDateTime.parse(date);
 		UserRuns userRuns = new UserRuns();
 		userRuns.setUserId(uid);
 		userRuns.setTid(tid);
-		userRuns.setDate(date);
+		userRuns.setDate(cdate);
 		userRuns.setTime(time);
 		userRuns.setLength(length);
 		userRuns.setComment(comment);
@@ -438,23 +465,24 @@ public class SQLController {
 
 	//    @PutMapping("/updateuserRuns/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserRuns?
-	@RequestMapping(value = "/updateUserRuns", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateUserRun", method = RequestMethod.GET)
 	public @ResponseBody String updateUserRuns(
 			@RequestParam(required = true) int id,
-			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int uid, 	// TODO: Never used? signed: Anton
 			@RequestParam(required = true) int tid,
-			@RequestParam(required = false) Date date,
-			@RequestParam(required = false) Double time,
+			@RequestParam(required = false)String date,
+			@RequestParam(required = false) BigInteger time,
 			@RequestParam(required = false) Integer length,
 			@RequestParam(required = false) String comment
 			) throws ResourceNotFoundException {
+
 		UserRuns userRuns = userRunsRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("UserRuns finns inte - id :: " + id));
 
-		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
+		LocalDateTime cdate = LocalDateTime.parse(date);
 
 		if(date != null)
-			userRuns.setDate(date);
+			userRuns.setDate(cdate);
 		if(time != null)
 			userRuns.setTime(time);
 		if(length != null)
@@ -480,21 +508,180 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
+
+	//UserGroup START
+	@GetMapping("/allUserGroups")
+	public List<UserGroup> getAllUserGroup() {
+		return (List<UserGroup>) userGroupRepository.findAll();
+	}
+
+	@GetMapping("/userGroup/{id}")
+	public ResponseEntity<UserGroup> getUserGroupById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		UserGroup userGroup = userGroupRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("UserGroup finns inte - id :: " + id));
+		return ResponseEntity.ok().body(userGroup);
+	}
+
+	@RequestMapping(value = "/addUserGroup", method = RequestMethod.GET)
+	public @ResponseBody String createUserGroup(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) String groupname
+			) throws ResourceNotFoundException{
+		User user = userRepository.findById(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + uid));
+		UserGroup userGroup = new UserGroup();
+		userGroup.setGroupName(groupname);
+		UserGroup saved = userGroupRepository.save(userGroup);
+		createUserGroupConnect(uid,saved.getID());
+		createUserAdminGroup(uid,saved.getID());
+		return "Saved"; 
+	}
+
+
+	//    @PutMapping("/updateuserGroup/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuserGroup?
+	@RequestMapping(value = "/updateUserGroup", method = RequestMethod.GET)
+	public @ResponseBody String updateUserGroup(
+			@RequestParam(required = true) int id,
+			@RequestParam(required = false) String groupname
+			) throws ResourceNotFoundException {
+		UserGroup userGroup = userGroupRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("UserGroup finns inte - id :: " + id));		
+		if(groupname != null)
+			userGroup.setGroupName(groupname);		
+		final UserGroup updatedUserGroup = userGroupRepository.save(userGroup);
+		if(updatedUserGroup != null)
+			return "Updated";
+		else
+			return "No update";
+	}
+
+	//    @DeleteMapping("/userGroupattributes/{id}")
+	@RequestMapping(value = "/deleteUserGroup/{id}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserGroup(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		UserGroup userGroup = userGroupRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
+		userGroupRepository.delete(userGroup);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	//UserGroupConnect START
+	@GetMapping("/userGroupConnect")
+	public List<UserGroupConnect> getAllUserGroupConnect() {
+		return (List<UserGroupConnect>) userGroupConnectRepository.findAll();
+	}
+
+	@GetMapping("/userGroupConnect/{uid}")
+	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
+		return ResponseEntity.ok().body(userGroupConnect);
+	}
+
+	@RequestMapping(value = "/addUserGroupConnect", method = RequestMethod.GET)
+	public @ResponseBody String createUserGroupConnect(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			) throws ResourceNotFoundException{
+		User user = userRepository.findById(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + uid));
+		UserGroupConnect userGroupConnect = new UserGroupConnect();
+		userGroupConnect.setUid(uid);
+		userGroupConnect.setGid(gid);
+		userGroupConnectRepository.save(userGroupConnect);
+		return "Saved"; 
+	}
+
+	//    @DeleteMapping("/userGroupConnectattributes/{id}")
+	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		userGroupConnectRepository.delete(userGroupConnect);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+
+	//UserAdminGroup START
+	@GetMapping("/userAdminGroup")
+	public List<UserAdminGroup> getAllUserAdminGroup() {
+		return (List<UserAdminGroup>) userAdminGroupRepository.findAll();
+	}
+
+	@GetMapping("/userAdminGroup/{uid}")
+	public ResponseEntity<UserAdminGroup> getUserAdminGroupById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - id :: " + id));
+		return ResponseEntity.ok().body(userAdminGroup);
+	}
+
+	@RequestMapping(value = "/addUserAdminGroup", method = RequestMethod.GET)
+	public @ResponseBody String createUserAdminGroup(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			){
+		UserAdminGroup userAdminGroup = new UserAdminGroup();
+		userAdminGroup.setUid(uid);		
+		userAdminGroup.setGid(gid);		
+		userAdminGroupRepository.save(userAdminGroup);
+		return "Saved"; 
+	}
+
+	//    @PutMapping("/updateuserAdminGroup/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuserAdminGroup?
+	@RequestMapping(value = "/updateUserAdminGroup", method = RequestMethod.GET)
+	public @ResponseBody String updateUserAdminGroup(
+			@RequestParam(required = true) int uid,
+			@RequestParam(required = true) int gid
+			) throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - uid :: " + uid));		
+		final UserAdminGroup updatedUserAdminGroup = userAdminGroupRepository.save(userAdminGroup);
+		if(updatedUserAdminGroup != null)
+			return "Updated";
+		else
+			return "No update";
+	}
+
+	//    @DeleteMapping("/userAdminGroupattributes/{id}")
+	@RequestMapping(value = "/deleteUserAdminGroup/{uid}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserAdminGroup(@PathVariable(value = "uid") int uid)
+			throws ResourceNotFoundException {
+		UserAdminGroup userAdminGroup = userAdminGroupRepository.findByUid(uid)
+				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		userAdminGroupRepository.delete(userAdminGroup);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+
 	//UserTrails START
 	@GetMapping("/userTrails")
 	public List<UserTrails> getAllUserTrails() {
 		return (List<UserTrails>) userTrailsRepository.findAll();
 	}
-	
+
 	@GetMapping("/userTrails/{uid}")
-	public ResponseEntity<UserTrails> getUserTrailsById(@PathVariable(value = "uid") int uid)
+	public ResponseEntity<List<UserTrails>> getUserTrailsById(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
-		UserTrails userTrails = userTrailsRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid); //TODO: Find a way to make it check with a orElseThrow
 		return ResponseEntity.ok().body(userTrails);
 	}
-	
+
+	@GetMapping("/usersFavTrails/{uid}")
+	public ResponseEntity<List<UserTrails>> getUsersFavoriteTrails(@PathVariable(value = "uid") int uid) throws ResourceNotFoundException {
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid);
+		userTrails.removeIf(ut -> ut.getFavourite() == false);
+		return ResponseEntity.ok().body(userTrails);
+	}
+
 	@RequestMapping(value = "/addUserTrails", method = RequestMethod.GET)
 	public @ResponseBody String createUserTrails(
 			@RequestParam(required = true) int tid,
@@ -505,11 +692,11 @@ public class SQLController {
 		userTrails.setTid(tid);
 		userTrails.setUid(uid);
 		userTrails.setFavourite(favourite);
-		
+
 		userTrailsRepository.save(userTrails);
 		return "Saved"; 
 	}
-	
+
 	//    @PutMapping("/updateuserTrails/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserTrails?
 	@RequestMapping(value = "/updateUserTrails", method = RequestMethod.GET)
@@ -518,24 +705,21 @@ public class SQLController {
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = false) boolean favourite
 			) throws ResourceNotFoundException {
-		UserTrails userTrails = userTrailsRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserTrails finns inte - uid :: " + uid));
-		
+		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid);
+		userTrails.removeIf(ur -> ur.getTid() != tid);
+
 		//		System.out.println("tid: " + tid + " caid: " + caid + " name: "+ name);
 
-		
-		if(userTrails.getFavourite() == true)
-			userTrails.setFavourite(true);
-		else
-			userTrails.setFavourite(favourite);
-		
-		final UserTrails updatedUserTrails = userTrailsRepository.save(userTrails);
+		userTrails.forEach(ur -> {
+			ur.setFavourite(favourite); // TODO: Think this is how it should look? signed: Anton
+		});
+		final Iterable<UserTrails> updatedUserTrails = userTrailsRepository.saveAll(userTrails);
 		if(updatedUserTrails != null)
 			return "Updated";
 		else
 			return "No update";
 	}
-	
+
 	//    @DeleteMapping("/userTrailsattributes/{id}")
 	@RequestMapping(value = "/deleteUserTrails/{id}", method = RequestMethod.GET)
 	public Map<String, Boolean> deleteUserTrails(@PathVariable(value = "id") int id)
@@ -548,69 +732,117 @@ public class SQLController {
 		return response;
 	}
 
+	//User START
+	@GetMapping("/allUser")
+	public List<User> getAllUser() {
+		return (List<User>) userRepository.findAll();
+	}
 
-
-	@GetMapping(path = "/addUser")
-	public @ResponseBody String addNewUser(@RequestParam(required = true) String fname,
-			@RequestParam(required = true) String lname, @RequestParam(required = true) String email, String photo) {
-
-		//		System.out.println("" + fname + " " + lname + " " + email);
-
-		User n = new User();
-		n.setFname(fname);
-		n.setLname(lname);
-		n.setEmail(email);
+	@GetMapping("/user/{id}")
+	public ResponseEntity<User> getUserById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		return ResponseEntity.ok().body(user);
+	}
+	//User
+	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+	public @ResponseBody String addNewUser(
+			@RequestParam(required = true) String fname,
+			@RequestParam(required = true) String lname,
+			@RequestParam(required = true) String email,
+			@RequestParam(required = false) String tagline,
+			@RequestParam(required = false) String photo
+			) {
+		User user = new User();
+		user.setFname(fname);
+		user.setLname(lname);
+		user.setEmail(email);
+		user.setEmail(tagline);
+		if (tagline != null)
+			user.setTagline(photo);
+		else {
+			String tmp = "";
+			user.setTagline(tmp);
+		}
 		if (photo != null)
-			n.setPhoto(photo);
+			user.setPhoto(photo);
 		else {
 			String tmp = "no picture";
-			n.setPhoto(tmp);
+			user.setPhoto(tmp);
 		}
-		userRepository.save(n);
+		userRepository.save(user);
 		return "Saved";
 	}
+	//    @PutMapping("/updateuser/{id}")
+	//	http://pvt73back.azurewebsites.net//updateuser?
+	@RequestMapping(value = "/updateUser", method = RequestMethod.GET)
+	public @ResponseBody String updateUser(
+			@RequestParam(required = true) int id,
+			@RequestParam(required = false) String fname,
+			@RequestParam(required = false) String lname,
+			@RequestParam(required = false) String email,
+			@RequestParam(required = false) String tagline,
+			@RequestParam(required = false) String photo
+			) throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		
+		if (fname != null)
+			user.setTagline(fname);
+		if (lname != null)
+			user.setTagline(lname);
+		if (email != null)
+			user.setTagline(email);
+		if (tagline != null)
+			user.setTagline(tagline);
+		if (photo != null)
+			user.setPhoto(photo);
 
-//	// /addUserRun?uid=1333&tid=namnppåspår&
-//	@GetMapping(path = "/addUserRun")
-//	public @ResponseBody String addUserRun(@RequestParam(required = true) int uid,
-//			@RequestParam(required = true) String tid, @RequestParam(required = true) Timestamp date,
-//			@RequestParam(required = true) double time, @RequestParam(required = true) int length, String comment) {
-//
-//		UserRuns ur = new UserRuns();
-//		ur.setUserId(uid);
-//		ur.setTid(tid);
-//		ur.setDate(date);
-//		ur.setTime(time);
-//		ur.setLength(length);
-//		if (comment != null)
-//			ur.setComment(comment);
-//		else {
-//			String tmp = " ";
-//			ur.setComment(tmp);
-//		}
-//		userRunsRepository.save(ur);
-//		return "Saved";
-//	}
-
-	@GetMapping(path = "/addGroup")
-	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname, Integer uid) {
-
-		Usergroup group = new Usergroup();
-		group.setGroupName(groupname);
-		groupRepository.save(group);
-		if (group != null) {
-			System.out.println("tmp not Null");
-			addNewGroupConnect(group.getID(), uid);
-		}
-		return "Saved";
+		final User updatedUser = userRepository.save(user);
+		if(updatedUser != null)
+			return "Updated";
+		else
+			return "No update";
 	}
 
-	// @PostMapping
-	private @ResponseBody String addNewGroupConnect(int uid, int gid) {
-		UserGroupConnect ugc = new UserGroupConnect();
-		ugc.setUid(uid);
-		ugc.setGid(gid);
-		return "Success";
+	//    @DeleteMapping("/userattributes/{id}")
+	@RequestMapping(value = "/deleteUser/{id}", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
+		userRepository.delete(user);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	//	@GetMapping(path = "/addGroup")
+	//	public @ResponseBody String addNewGroup(@RequestParam(required = true) String groupname, Integer uid) {
+	//
+	//		UserGroup group = new UserGroup();
+	//		group.setGroupName(groupname);
+	//		userGroupRepository.save(group);
+	//		if (group != null) {
+	//			System.out.println("tmp not Null");
+	//			addNewGroupConnect(group.getID(), uid);
+	//		}
+	//		return "Saved";
+	//	}
+	//
+	//	private @ResponseBody String addNewGroupConnect(int uid, int gid) {
+	//		UserGroupConnect ugc = new UserGroupConnect();
+	//		ugc.setUid(uid);
+	//		ugc.setGid(gid);
+	//		return "Success";
+	//	}
+	
+	@GetMapping("/trail/{id}")
+	public ResponseEntity<Trail> getTrailsById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Trail trail = trailRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Trail finns inte - id :: " + id));
+		return ResponseEntity.ok().body(trail);
 	}
 
 	@CrossOrigin
@@ -620,8 +852,8 @@ public class SQLController {
 	}
 
 	@GetMapping(path="/allGroups")
-	public @ResponseBody Iterable<Usergroup> getAllGroups() {
-		return groupRepository.findAll();
+	public @ResponseBody Iterable<UserGroup> getAllGroups() {
+		return userGroupRepository.findAll();
 	}
 
 	@CrossOrigin
@@ -637,10 +869,11 @@ public class SQLController {
 		trails.sort(new TrailsGeoLocationComparator(lat, lon));
 		return trails;
 	}
-	
+
 	@CrossOrigin
 	@GetMapping(path = "/getUser")
-	public @ResponseBody Optional<User> getUser(@RequestParam(required = false) String name,
+	public @ResponseBody Optional<User> getUser(
+			@RequestParam(required = false) String name,
 			@RequestParam(required = false) Integer id) {
 		if (id != null) {
 			return userRepository.findById(id);
@@ -751,9 +984,5 @@ public class SQLController {
 		return dist / 100;
 
 	}
-	
-	
-	
-
 
 }

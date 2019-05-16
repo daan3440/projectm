@@ -16,6 +16,7 @@ public class User {
 	private String lname;
 	private String email;
 	private String psw;
+	private String tagline;
 	private String photo;
 
 	public Integer getId() {
@@ -51,6 +52,13 @@ public class User {
 	
 	public void setPassword(String email){
 		this.email=email;
+	}
+	public String getTagline(){
+		return tagline;
+	}
+	
+	public void setTagline(String tagline){
+		this.tagline=tagline;
 	}
 
 	public String getPhoto(){

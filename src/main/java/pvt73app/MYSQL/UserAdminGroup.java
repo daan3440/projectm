@@ -9,13 +9,22 @@ import javax.persistence.Id;
 @Entity(name = "useradmingroup")
 public class UserAdminGroup {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int uid;
 	private int gid;
 
+	
+	public int getUid(){
+		return uid;
+	}
+	
+	public void setUid(int uid){
+		this.uid=uid;
+	}
 	public int getGid(){
 		return gid;
 	}
-
+	
 	public void setGid(int gid){
 		this.gid=gid;
 	}

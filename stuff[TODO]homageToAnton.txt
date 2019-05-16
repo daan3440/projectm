@@ -1,0 +1,16 @@
+Profil interface:
+
+Aktivitet (post):
+getProfil(userId); -> namn, tagline, bild, antal post, spår, badges. // Maybe make a view for this one as it would make it easier as it is a non trivial task.
+getAktiviteterNära(pos);
+getMyPost(userid); -> ens post, det användaren har gjort
+getMytFavTrail(userid); -> favoritspåren KLAR!
+getMybadges(userid); -> sina märken
+
+
+Spårsida interface:
+getLeaderBoardWTrailId(id); -> lista med user + tider
+getWeather(pos); -> väderinfo
+getDistance(pos); -> avstånd till spårets början
+rate(user, trail, rating, date); -> uppdatera spårets rating (Får ej göras innan MVP är klar)
+addFavorite(user, trail, favbool);
