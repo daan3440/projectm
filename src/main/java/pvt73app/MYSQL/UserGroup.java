@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 // This tells Hibernate to make a table out of this class
 @Entity(name = "usergroup")
-public class Usergroup {
+public class UserGroup {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
