@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Lists;
+
 import pvt73app.API.APIRetriever;
 import pvt73app.API.TrailDTO;
 import pvt73app.Coordinates.DistanceGPSCoordinates;
@@ -867,8 +869,15 @@ public class SQLController {
 
 	@CrossOrigin
 	@GetMapping(path = "/allTrails")
-	public @ResponseBody Iterable<Trail> getAllTrails() {
-		return trailRepository.findAll();
+	public @ResponseBody List<Trail> getAllTrails() {
+		List<Trail> list = Lists.newArrayList(trailRepository.findAll());
+		list.sort(new Comparator<Trail>() {
+			@Override
+			public int compare(Trail t1, Trail t2) {
+				return t1.getTrailName().compareTo(t2.getTrailName());
+			}
+			});
+		return list;
 	}
 
 	@CrossOrigin
