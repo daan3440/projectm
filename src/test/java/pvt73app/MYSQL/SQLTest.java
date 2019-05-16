@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -290,7 +291,16 @@ import pvt73app.ProjectmApplication;
     	 } catch (final HttpClientErrorException e) {
     		 assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
     	 }
-     }
+	 }
+	 
+//	 @Test //TODO: Test not working don't know how to make sure the return class is correct
+//	 public void testGettingFavTrails() {
+//		 int id = 12;
+//		 ResponseEntity<List<UserTrails>> utList = restTemplate.getForObject(getRootUrl() + "/usersFavTrails/" + id, ResponseEntity.class);
+//		 utList.getBody().forEach(ut ->  {
+//			 assertEquals(true, ut.getFavourite());
+//		 });
+//	 }
      
 
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Lists;
+
 import pvt73app.API.APIRetriever;
 import pvt73app.API.TrailDTO;
 import pvt73app.Coordinates.DistanceGPSCoordinates;
@@ -845,6 +847,15 @@ public class SQLController {
 		return ResponseEntity.ok().body(trail);
 	}
 
+	@GetMapping(path = "/addFavourite")
+	public ResponseEntity<List<UserTrails>> addFavourite(@PathVariable(required = true) Integer uid,
+												   		 @PathVariable(required = true) Integer tid) {
+		List<UserTrails> tempList = userTrailsRepository.findByUid(uid);
+		tempList.removeIf(ut -> ut.getTid() != tid);
+		tempList.forEach(ut -> ut.setFavourite(true));
+		return ResponseEntity.ok().body(tempList);
+	}
+
 	@CrossOrigin
 	@GetMapping(path = "/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
@@ -858,8 +869,15 @@ public class SQLController {
 
 	@CrossOrigin
 	@GetMapping(path = "/allTrails")
-	public @ResponseBody Iterable<Trail> getAllTrails() {
-		return trailRepository.findAll();
+	public @ResponseBody List<Trail> getAllTrails() {
+		List<Trail> list = Lists.newArrayList(trailRepository.findAll());
+		list.sort(new Comparator<Trail>() {
+			@Override
+			public int compare(Trail t1, Trail t2) {
+				return t1.getTrailName().compareTo(t2.getTrailName());
+			}
+			});
+		return list;
 	}
 
 	@CrossOrigin
