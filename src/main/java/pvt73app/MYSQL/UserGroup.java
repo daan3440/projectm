@@ -14,9 +14,6 @@ public class UserGroup {
 	private Integer id;
 	private String groupname;
 
-	public Integer getID() {
-		return id;
-	}
 	public String getGroupName(){
 		return groupname;
 	}
@@ -25,4 +22,7 @@ public class UserGroup {
 		this.groupname=groupname;
 	}
 
+	public Integer getID() {
+		return id;
+	}
 }
