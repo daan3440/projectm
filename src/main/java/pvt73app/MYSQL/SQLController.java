@@ -984,5 +984,13 @@ public class SQLController {
 		return dist / 100;
 
 	}
+	
+	@CrossOrigin
+	@GetMapping(path = "/getTrailByLocation")
+	public @ResponseBody Trail getTrialByLocation(@RequestParam double lat, @RequestParam double lon) {
+		List<Trail> trails = getAllTrailsList();
+		trails.sort(new TrailsGeoLocationComparator(lat, lon));
+		return trails.get(0);
+	}
 
 }
