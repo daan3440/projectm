@@ -13,4 +13,4 @@ getLeaderBoardWTrailId(id); -> lista med user + tider
 getWeather(pos); -> väderinfo
 getDistance(pos); -> avstånd till spårets början
 rate(user, trail, rating, date); -> uppdatera spårets rating (Får ej göras innan MVP är klar)
-addFavorite(user, trail, favbool);
+addFavorite(user, trail, favbool); DONE!!!
