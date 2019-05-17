@@ -73,12 +73,12 @@ public class SQLController {
 	public String hejSQL() {
 		return "SQL up!";
 	}
-
+	@CrossOrigin
 	@GetMapping("/challenges")
 	public List<Challenge> getAllChallenges() {
 		return (List<Challenge>) challengeRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/challenge/{id}")
 	public ResponseEntity<Challenge> getChallengeById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -86,7 +86,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("Utmaning finns inte - id :: " + id));
 		return ResponseEntity.ok().body(challenge);
 	}
-
+	@CrossOrigin
 	//    @PostMapping("/addchallenge")
 	@RequestMapping(value = "/addChallenge", method = RequestMethod.GET)
 	public @ResponseBody String createChallenge(@RequestParam(required = true) int tid,
@@ -98,7 +98,7 @@ public class SQLController {
 		challengeRepository.save(challenge);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updatechallenge/{id}")
 	//	http://pvt73back.azurewebsites.net//updatechallenge?id=int&tid=int&caid=int&name="string"
 	@RequestMapping(value = "/updateChallenge", method = RequestMethod.GET)
@@ -136,13 +136,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//ChallengeAttributes START
 	@GetMapping("/challengeAttributes")
 	public List<ChallengeAttributes> getAllChallengeAttributes() {
 		return (List<ChallengeAttributes>) challengeAttributesRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/challengeAttributes/{id}")
 	public ResponseEntity<ChallengeAttributes> getChallengeAttributesById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -150,7 +150,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttributes finns inte - id :: " + id));
 		return ResponseEntity.ok().body(challengeAttributes);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addChallengeAttributes", method = RequestMethod.GET)
 	public @ResponseBody String createChallengeAttributes(
 			@RequestParam(required = false) Integer count,
@@ -169,7 +169,7 @@ public class SQLController {
 		challengeAttributesRepository.save(challengeAttributes);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updatechallengeAttributes/{id}")
 	//	http://pvt73back.azurewebsites.net//updatechallengeAttributes?id=int&tid=int&caid=int&name="string"
 	@RequestMapping(value = "/updateChallengeAttributes", method = RequestMethod.GET)
@@ -216,12 +216,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+	@CrossOrigin
 	//ChallengeConnector START
 	@GetMapping("/challengeConnector")
 	public List<ChallengeConnector> getAllChallengeConnector() {
 		return (List<ChallengeConnector>) challengeConnectorRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/challengeConnector/{cid}")
 	public ResponseEntity<ChallengeConnector> getChallengeConnectorById(@PathVariable(value = "cid") int cid)
 			throws ResourceNotFoundException {
@@ -229,7 +230,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeConnector finns inte - cid :: " + cid));
 		return ResponseEntity.ok().body(challengeConnector);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addChallengeConnector", method = RequestMethod.GET)
 	public @ResponseBody String createChallengeConnector(
 			@RequestParam(required = true) Integer caid,
@@ -243,7 +244,7 @@ public class SQLController {
 		challengeConnectorRepository.save(challengeConnector);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updatechallengeConnector/{id}")
 	//	http://pvt73back.azurewebsites.net//updatechallengeConnector?id=int&tid=int&caid=int&name="string"
 	@RequestMapping(value = "/updateChallengeConnector", method = RequestMethod.GET)
@@ -280,12 +281,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+	@CrossOrigin
 	//GroupChallengeConnect START
 	@GetMapping("/groupChallengeConnect")
 	public List<GroupChallengeConnect> getAllGroupChallengeConnect() {
 		return (List<GroupChallengeConnect>) groupChallengeConnectRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/groupChallengeConnect/{cid}")
 	public ResponseEntity<GroupChallengeConnect> getGroupChallengeConnectById(@PathVariable(value = "cid") int cid)
 			throws ResourceNotFoundException {
@@ -293,7 +295,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("GroupChallengeConnect finns inte - cid :: " + cid));
 		return ResponseEntity.ok().body(groupChallengeConnect);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addGroupChallengeConnect", method = RequestMethod.GET)
 	public @ResponseBody String createGroupChallengeConnect(
 			@RequestParam(required = true) Integer gid,
@@ -305,7 +307,7 @@ public class SQLController {
 		groupChallengeConnectRepository.save(groupChallengeConnect);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updategroupChallengeConnect/{id}")
 	//	http://pvt73back.azurewebsites.net//updategroupChallengeConnect?
 	@RequestMapping(value = "/updateGroupChallengeConnect", method = RequestMethod.GET)
@@ -339,13 +341,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//TrailReview START
 	@GetMapping("/trailReview")
 	public List<TrailReview> getAllTrailReview() {
 		return (List<TrailReview>) trailReviewRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/trailReview/{tid}")
 	public ResponseEntity<TrailReview> getTrailReviewById(@PathVariable(value = "tid") int tid)
 			throws ResourceNotFoundException {
@@ -353,7 +355,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
 		return ResponseEntity.ok().body(trailReview);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addTrailReview", method = RequestMethod.GET)
 	public @ResponseBody String createTrailReview(
 			@RequestParam(required = true) int tid,
@@ -374,7 +376,7 @@ public class SQLController {
 		trailReviewRepository.save(trailReview);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updatetrailReview/{id}")
 	//	http://pvt73back.azurewebsites.net//updatetrailReview?
 	@RequestMapping(value = "/updateTrailReview", method = RequestMethod.GET)
@@ -442,7 +444,7 @@ public class SQLController {
 		});
 		return leaderboard;
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addUserRun", method = RequestMethod.GET)
 	public @ResponseBody String createUserRuns(
 			@RequestParam(required = true) int uid,
@@ -464,7 +466,7 @@ public class SQLController {
 		userRunsRepository.save(userRuns);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updateuserRuns/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserRuns?
 	@RequestMapping(value = "/updateUserRun", method = RequestMethod.GET)
@@ -510,13 +512,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//UserGroup START
 	@GetMapping("/allUserGroups")
 	public List<UserGroup> getAllUserGroup() {
 		return (List<UserGroup>) userGroupRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/userGroup/{id}")
 	public ResponseEntity<UserGroup> getUserGroupById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -524,7 +526,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserGroup finns inte - id :: " + id));
 		return ResponseEntity.ok().body(userGroup);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addUserGroup", method = RequestMethod.GET)
 	public @ResponseBody String createUserGroup(
 			@RequestParam(required = true) int uid,
@@ -540,7 +542,7 @@ public class SQLController {
 		return "Saved"; 
 	}
 
-
+	@CrossOrigin
 	//    @PutMapping("/updateuserGroup/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserGroup?
 	@RequestMapping(value = "/updateUserGroup", method = RequestMethod.GET)
@@ -570,12 +572,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+	@CrossOrigin
 	//UserGroupConnect START
 	@GetMapping("/userGroupConnect")
 	public List<UserGroupConnect> getAllUserGroupConnect() {
 		return (List<UserGroupConnect>) userGroupConnectRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/userGroupConnect/{uid}")
 	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
@@ -583,7 +586,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
 		return ResponseEntity.ok().body(userGroupConnect);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addUserGroupConnect", method = RequestMethod.GET)
 	public @ResponseBody String createUserGroupConnect(
 			@RequestParam(required = true) int uid,
@@ -609,13 +612,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//UserAdminGroup START
 	@GetMapping("/userAdminGroup")
 	public List<UserAdminGroup> getAllUserAdminGroup() {
 		return (List<UserAdminGroup>) userAdminGroupRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/userAdminGroup/{uid}")
 	public ResponseEntity<UserAdminGroup> getUserAdminGroupById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -623,7 +626,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - id :: " + id));
 		return ResponseEntity.ok().body(userAdminGroup);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addUserAdminGroup", method = RequestMethod.GET)
 	public @ResponseBody String createUserAdminGroup(
 			@RequestParam(required = true) int uid,
@@ -635,7 +638,7 @@ public class SQLController {
 		userAdminGroupRepository.save(userAdminGroup);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updateuserAdminGroup/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserAdminGroup?
 	@RequestMapping(value = "/updateUserAdminGroup", method = RequestMethod.GET)
@@ -663,27 +666,27 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//UserTrails START
 	@GetMapping("/userTrails")
 	public List<UserTrails> getAllUserTrails() {
 		return (List<UserTrails>) userTrailsRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/userTrails/{uid}")
 	public ResponseEntity<List<UserTrails>> getUserTrailsById(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
 		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid); //TODO: Find a way to make it check with a orElseThrow
 		return ResponseEntity.ok().body(userTrails);
 	}
-
+	@CrossOrigin
 	@GetMapping("/usersFavTrails/{uid}")
 	public ResponseEntity<List<UserTrails>> getUsersFavoriteTrails(@PathVariable(value = "uid") int uid) throws ResourceNotFoundException {
 		List<UserTrails> userTrails = userTrailsRepository.findByUid(uid);
 		userTrails.removeIf(ut -> ut.getFavourite() == false);
 		return ResponseEntity.ok().body(userTrails);
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/addUserTrails", method = RequestMethod.GET)
 	public @ResponseBody String createUserTrails(
 			@RequestParam(required = true) int tid,
@@ -698,7 +701,7 @@ public class SQLController {
 		userTrailsRepository.save(userTrails);
 		return "Saved"; 
 	}
-
+	@CrossOrigin
 	//    @PutMapping("/updateuserTrails/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuserTrails?
 	@RequestMapping(value = "/updateUserTrails", method = RequestMethod.GET)
@@ -733,13 +736,13 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-
+	@CrossOrigin
 	//User START
 	@GetMapping("/allUser")
 	public List<User> getAllUser() {
 		return (List<User>) userRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/user/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -748,6 +751,7 @@ public class SQLController {
 		return ResponseEntity.ok().body(user);
 	}
 	//User
+	@CrossOrigin
 	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public @ResponseBody String addNewUser(
 			@RequestParam(required = true) String fname,
@@ -778,6 +782,7 @@ public class SQLController {
 	}
 	//    @PutMapping("/updateuser/{id}")
 	//	http://pvt73back.azurewebsites.net//updateuser?
+	@CrossOrigin
 	@RequestMapping(value = "/updateUser", method = RequestMethod.GET)
 	public @ResponseBody String updateUser(
 			@RequestParam(required = true) int id,
@@ -838,7 +843,7 @@ public class SQLController {
 	//		ugc.setGid(gid);
 	//		return "Success";
 	//	}
-	
+	@CrossOrigin
 	@GetMapping("/trail/{id}")
 	public ResponseEntity<Trail> getTrailsById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
@@ -846,7 +851,7 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("Trail finns inte - id :: " + id));
 		return ResponseEntity.ok().body(trail);
 	}
-
+	@CrossOrigin
 	@GetMapping(path = "/addFavourite")
 	public ResponseEntity<List<UserTrails>> addFavourite(@PathVariable(required = true) Integer uid,
 												   		 @PathVariable(required = true) Integer tid) {
@@ -855,13 +860,13 @@ public class SQLController {
 		tempList.forEach(ut -> ut.setFavourite(true));
 		return ResponseEntity.ok().body(tempList);
 	}
-
+	
 	@CrossOrigin
 	@GetMapping(path = "/allUsers")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping(path="/allGroups")
 	public @ResponseBody Iterable<UserGroup> getAllGroups() {
 		return userGroupRepository.findAll();
@@ -917,7 +922,7 @@ public class SQLController {
 		// System.out.println("Print da lista a: " +trailList.toString());
 		return trailList;
 	}
-
+	@CrossOrigin
 	@GetMapping(path="/addTrails")
 	public @ResponseBody String addTrails() {
 		trailRepository.saveAll(getTrailsFromDTOs());
@@ -939,7 +944,7 @@ public class SQLController {
 		}
 		return trails;
 	}
-
+	@CrossOrigin
 	@RequestMapping(value = "/updateTrail", method = RequestMethod.GET)
 	public @ResponseBody String updateTrail(
 			@RequestParam(required = true) int id,
@@ -977,14 +982,14 @@ public class SQLController {
 	public @ResponseBody Optional<Trail> getTrailById(@PathVariable("id") int id) {
 		return trailRepository.findById(id);
 	}
-
+	@CrossOrigin
 	@GetMapping(path = "/dropTrail/{id}")
 	public @ResponseBody String dropTrailById(@PathVariable("id") int id) {
 		trailRepository.deleteById(id);
 
 		return id + " is GONE";
 	}
-
+	@CrossOrigin
 	@GetMapping(path = "/dropUser/{id}")
 	public @ResponseBody String dropUserById(@PathVariable("id") int id) {
 		userRepository.deleteById(id);
