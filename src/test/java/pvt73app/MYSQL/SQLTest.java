@@ -205,7 +205,7 @@ import pvt73app.ProjectmApplication;
      
      @Test
      public void testGetTrailsById() {
-    	 Trail trail = restTemplate.getForObject(getRootUrl() + "/trail/2", Trail.class);
+    	 Trail trail = restTemplate.getForObject(getRootUrl() + "/trail/7", Trail.class);
     	 System.out.println("trail.email() "+trail.getId());
     	 assertNotNull(trail);
     	 assertEquals(2, (long) trail.getId());
