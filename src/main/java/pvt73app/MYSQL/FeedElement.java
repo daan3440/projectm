@@ -1,8 +1,7 @@
 package pvt73app.MYSQL;
 
-class FeedElement {
-    
-    public FeedElement() {
-        
-    }
+import java.time.LocalDateTime;
+
+interface FeedElement {    
+    public LocalDateTime getDate();
 }

@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 
 // This tells Hibernate to make a table out of this class
 @Entity(name = "trailreview")
-public class TrailReview {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+public class TrailReview implements FeedElement{
 	private int tid;
+    @Id
     private int uid;
 	private String review;
 	private int rating;

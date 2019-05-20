@@ -349,10 +349,9 @@ public class SQLController {
 	}
 	@CrossOrigin
 	@GetMapping("/trailReview/{tid}")
-	public ResponseEntity<TrailReview> getTrailReviewById(@PathVariable(value = "tid") int tid)
+	public ResponseEntity<List<TrailReview>> getTrailReviewById(@PathVariable(value = "tid") int tid)
 			throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid)
-				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
+		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
 		return ResponseEntity.ok().body(trailReview);
 	}
 	@CrossOrigin
@@ -388,20 +387,22 @@ public class SQLController {
 			@RequestParam(required = false) String date,
 			@RequestParam(required = false) String title
 			) throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid) // TODO: Should it not be uid and tid together that fins the correct rewiev and not only the tid? signed: Antin
-				.orElseThrow(() -> new ResourceNotFoundException("TrailReview finns inte - tid :: " + tid));
+		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid); 
+		trailReview.removeIf(tr -> tr.getUid() != uid);
+		// TODO: Should it not be uid and tid together that finds the correct review and not only the tid? 
+		// signed: Anton	
 
 		LocalDateTime cdate = LocalDateTime.parse(date);
 		if(review != null)
-			trailReview.setReview(review);
+			trailReview.get(0).setReview(review);
 		if(rating != null)
-			trailReview.setRating(rating);
+			trailReview.get(0).setRating(rating);
 		if(date!= null)
-			trailReview.setDate(cdate);
+			trailReview.get(0).setDate(cdate);
 		if(title != null)
-			trailReview.setTitle(title);
+			trailReview.get(0).setTitle(title);
 
-		final TrailReview updatedTrailReview = trailReviewRepository.save(trailReview);
+		final TrailReview updatedTrailReview = trailReviewRepository.save(trailReview.get(0));
 		if(updatedTrailReview != null)
 			return "Updated";
 		else
@@ -409,12 +410,13 @@ public class SQLController {
 	}
 
 	//    @DeleteMapping("/trailReviewattributes/{id}")
-	@RequestMapping(value = "/deleteTrailReview/{id}", method = RequestMethod.GET)
-	public Map<String, Boolean> deleteTrailReview(@PathVariable(value = "tid") int tid)
+	@RequestMapping(value = "/deleteTrailReview/", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteTrailReview(@PathVariable(value = "tid", required = true) int tid,
+												  @PathVariable(value = "uid", required = true) int uid)
 			throws ResourceNotFoundException {
-		TrailReview trailReview = trailReviewRepository.findByTid(tid)
-				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - tid :: " + tid));
-		trailReviewRepository.delete(trailReview);
+		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
+		trailReview.removeIf(tr -> tr.getUid() != uid);
+		trailReview.forEach(tr -> trailReviewRepository.delete(tr));
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
@@ -741,16 +743,18 @@ public class SQLController {
 
 	@CrossOrigin
 	@GetMapping("/userFeed/{id}")
-	public ResponseEntity<List<UserRuns>> getUserFeed(@PathVariable(required = true, value = "id") int id)
+	public ResponseEntity<List<FeedElement>> getUserFeed(@PathVariable(required = true, value = "id") int id)
 			throws ResourceNotFoundException {
-		List<UserRuns> feedElements = new ArrayList<>();
+		List<FeedElement> feedElements = new ArrayList<>();
 		getUsersFavoriteTrails(id).getBody().forEach(ut ->  {
 			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
+			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
 		});
-		feedElements.sort(new Comparator<UserRuns>() {
+
+		feedElements.sort(new Comparator<FeedElement>() {
 			@Override
-			public int compare(UserRuns ur1, UserRuns ur2) {
-				return ur1.getDate().compareTo(ur2.getDate()) * -1;
+			public int compare(FeedElement fe1, FeedElement fe2) {
+				return fe1.getDate().compareTo(fe2.getDate()) * -1;
 			}
 		});
 		return ResponseEntity.ok().body(feedElements);
