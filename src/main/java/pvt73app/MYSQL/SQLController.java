@@ -746,7 +746,7 @@ public class SQLController {
 	public ResponseEntity<List<FeedElement>> getUserFeed(@PathVariable(required = true, value = "id") int id)
 			throws ResourceNotFoundException {
 		List<FeedElement> feedElements = new ArrayList<>();
-		getUsersFavoriteTrails(id).getBody().forEach(ut ->  {
+		getUserTrailsById(id).getBody().forEach(ut ->  {
 			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
 			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
 		});
@@ -757,7 +757,7 @@ public class SQLController {
 				return fe1.getDate().compareTo(fe2.getDate()) * -1;
 			}
 		});
-		return ResponseEntity.ok().body(feedElements);
+		return ResponseEntity.ok().body(feedElements.subList(0, (feedElements.size() > 100 ? 100 : feedElements.size())));
 	}
 
 	// FEED END
