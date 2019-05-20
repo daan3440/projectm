@@ -11,7 +11,7 @@ import javax.persistence.Id;
 
 // This tells Hibernate to make a table out of this class
 @Entity(name = "userruns")
-public class UserRuns {
+public class UserRuns implements FeedElement{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
