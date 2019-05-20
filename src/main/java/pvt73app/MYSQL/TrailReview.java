@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 // This tells Hibernate to make a table out of this class
 @Entity(name = "trailreview")
 public class TrailReview implements FeedElement{
-	private int tid;
+	private int tid; // TODO: Make tid and uid into a composit key to make it work in the future
     @Id
     private int uid;
 	private String review;
