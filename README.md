@@ -11,6 +11,7 @@ Argument with ? may or may not be included
 Return Value | Path | Arguments
 --------------|------------------|----------------
 String | /hejSQL
+ResponseEntity<List<FeedElements>> | /userFeed/{id} | int id
 List<Challenges> | /challenges
 ResponseEntity<Challenge> | /challenge/{id} | int ID 
 String | /addChallenge | int TrailID, int ChallengeID, String Name
