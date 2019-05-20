@@ -35,7 +35,7 @@ List<TrailReview> | /trailReview
 ResponseEntity<TrailReview> | /trailReview/{tid} | int tid
 String | /addTrailReview | int tid, int uid, ? String review, ? int rating, ? String date, ? String title
 String | /updateTrailReview | int tid, int uid, ? String review, ? int rating, ? String date, ? String title
-Map<String, Boolean> | /deleteTrailReview/{id} | int tid
+Map<String, Boolean> | /deleteTrailReview/ | int tid, int uid
 List<UserRuns> | /userRuns 
 ResponseEntity<UserRuns> | /userRuns/{id} | int id
 Iterable<UserRuns> | /leaderboard/{tid} | int tid
