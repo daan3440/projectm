@@ -736,6 +736,28 @@ public class SQLController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	// FEED
+
+	@CrossOrigin
+	@GetMapping("/userFeed/{id}")
+	public ResponseEntity<List<UserRuns>> getUserFeed(@PathVariable(required = true, value = "id") int id)
+			throws ResourceNotFoundException {
+		List<UserRuns> feedElements = new ArrayList<>();
+		getUsersFavoriteTrails(id).getBody().forEach(ut ->  {
+			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
+		});
+		feedElements.sort(new Comparator<UserRuns>() {
+			@Override
+			public int compare(UserRuns ur1, UserRuns ur2) {
+				return ur1.getDate().compareTo(ur2.getDate()) * -1;
+			}
+		});
+		return ResponseEntity.ok().body(feedElements);
+	}
+
+	// FEED END
+
 	@CrossOrigin
 	//User START
 	@GetMapping("/allUser")
