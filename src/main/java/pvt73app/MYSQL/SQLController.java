@@ -749,9 +749,12 @@ public class SQLController {
 		getUserTrailsById(id).getBody().forEach(ut ->  {
 			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
 			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
-			challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
-			feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
+			
+			//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
+			//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
 		});
+		getUserGroupConnectByUid(id).getBody(); // TODO: Needs to return a list of all groups the user 
+												//       have get challenges connected to the said groups
 
 		feedElements.sort(new Comparator<FeedElement>() {
 			@Override
