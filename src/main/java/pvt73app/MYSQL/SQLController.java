@@ -749,6 +749,8 @@ public class SQLController {
 		getUserTrailsById(id).getBody().forEach(ut ->  {
 			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
 			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
+			challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
+			feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
 		});
 
 		feedElements.sort(new Comparator<FeedElement>() {
