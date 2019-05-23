@@ -777,6 +777,18 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
 		return ResponseEntity.ok().body(user);
 	}
+
+	@CrossOrigin
+	@GetMapping("userGetId")
+	public int getUserId(@PathVariable(value = "mail", required = true) String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if (user.isPresent()) {
+			return user.get().getId();
+		}
+		else {
+			return -1;
+		}
+	}
 	//User
 	@CrossOrigin
 	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
