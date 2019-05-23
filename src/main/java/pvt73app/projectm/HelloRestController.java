@@ -18,6 +18,7 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -103,7 +104,15 @@ public class HelloRestController {
 		}
 		
 		if(id.equals("653df67f-4859-4af3-a6f6-955a592f572d2")) {
+			FileInputStream input = new FileInputStream(file);
+			MultipartFile multipartFile = new MockMultipartFile("file",
+					file.getName(), "text/plain", IOUtils.toByteArray(input));
+		
 		}
+		
+//		File file = new File("src/test/resources/input.txt");
+		
+	
 		
 		byte[] image = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 
