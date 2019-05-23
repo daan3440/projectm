@@ -422,11 +422,12 @@ public class SQLController {
 		return response;
 	}
 	//UserRuns START
+	@CrossOrigin
 	@GetMapping("/userRuns")
 	public List<UserRuns> getAllUserRuns() {
 		return (List<UserRuns>) userRunsRepository.findAll();
 	}
-
+	@CrossOrigin
 	@GetMapping("/userRuns/{id}")
 	public ResponseEntity<UserRuns> getUserRunsById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
