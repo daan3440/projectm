@@ -73,6 +73,7 @@ ResponseEntity<List<UserTrails>> | /addFavourite | int uid, int tid
 Iterable<User> | /allUsers
 Iterable<UserGroup> | /allGroups
 List<Trail> | /allTrails
+ResponseEntity<List<FeedElement>> | /userFeed/{id} | int uid
 Iterable<Trail> | /allTrailsSortedByLocation | double lat double lon
 String | /addTrails
 String | /updateTrail
