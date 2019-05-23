@@ -45,6 +45,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
+         <dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk</artifactId>
+    <version>1.11.327</version>
+  </dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-active-directory-spring-boot-starter</artifactId>
