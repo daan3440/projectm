@@ -582,10 +582,10 @@ public class SQLController {
 	}
 	@CrossOrigin
 	@GetMapping("/userGroupConnect/{uid}")
-	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
+	public ResponseEntity<List<UserGroupConnect>> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
-		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
+		List<UserGroupConnect> userGroupConnect = userGroupConnectRepository.findByUid(uid);
+				//.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
 		return ResponseEntity.ok().body(userGroupConnect);
 	}
 	@CrossOrigin
@@ -605,11 +605,13 @@ public class SQLController {
 
 	//    @DeleteMapping("/userGroupConnectattributes/{id}")
 	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
-	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid") int uid)
+	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid", required = true) int uid, 
+													   @PathVariable(value = "gid", required = true) int gid)
 			throws ResourceNotFoundException {
-		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
-		userGroupConnectRepository.delete(userGroupConnect);
+		List<UserGroupConnect> userGroupConnect = userGroupConnectRepository.findByUid(uid);
+				//.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		userGroupConnect.indexOf();
+		userGroupConnectRepository.delete();
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
@@ -753,8 +755,10 @@ public class SQLController {
 			//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
 			//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
 		});
-		getUserGroupConnectByUid(id).getBody(); // TODO: Needs to return a list of all groups the user 
+		//getUserGroupConnectByUid(id).getBody(); // TODO: Needs to return a list of all groups the user 
 												//       have get challenges connected to the said groups
+
+		userGroupConnectRepository.findByUid(id);
 
 		feedElements.sort(new Comparator<FeedElement>() {
 			@Override
