@@ -107,7 +107,8 @@ public class HelloRestController {
 			FileInputStream input = new FileInputStream(file);
 			MultipartFile multipartFile = new MockMultipartFile("file",
 					file.getName(), "text/plain", IOUtils.toByteArray(input));
-		
+			
+			//new FTPController().handleFileUpload(multipartFile, );
 		}
 		
 //		File file = new File("src/test/resources/input.txt");
