@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pvt73app.FTP.FTPController;
 
@@ -90,6 +91,7 @@ public class HelloRestController {
 		return new GeoLocText("lat = " + lat + " long = " + lon);
 	}
 
+	@CrossOrigin
 	@RequestMapping("/trailImage")
 	@ResponseBody
 	public HttpEntity<byte[]> getPhoto(@RequestParam (required=false, defaultValue="default") String id) throws IOException, URISyntaxException {
@@ -108,7 +110,8 @@ public class HelloRestController {
 			MultipartFile multipartFile = new MockMultipartFile("file",
 					file.getName(), "text/plain", IOUtils.toByteArray(input));
 			
-			//new FTPController().handleFileUpload(multipartFile, );
+			RedirectAttributes reAtt = null;
+			new FTPController().handleFileUpload(multipartFile, reAtt);
 		}
 		
 //		File file = new File("src/test/resources/input.txt");
