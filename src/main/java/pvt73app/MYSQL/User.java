@@ -43,15 +43,15 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String psw){
-		this.psw=psw;
+	public void setEmail(String email){
+		this.email=email;
 	}
 	public String getPassword(){
 		return psw;
 	}
 	
-	public void setPassword(String email){
-		this.email=email;
+	public void setPassword(String psw){
+		this.psw=psw;
 	}
 	public String getTagline(){
 		return tagline;

@@ -797,15 +797,15 @@ public class SQLController {
 			@RequestParam(required = true) String lname,
 			@RequestParam(required = true) String email,
 			@RequestParam(required = false) String tagline,
-			@RequestParam(required = false) String photo
+			@RequestParam(required = false) String photo,
+			@RequestParam(required = false) String psw
 			) {
 		User user = new User();
 		user.setFname(fname);
 		user.setLname(lname);
 		user.setEmail(email);
-		user.setEmail(tagline);
 		if (tagline != null)
-			user.setTagline(photo);
+			user.setTagline(tagline);
 		else {
 			String tmp = "";
 			user.setTagline(tmp);
@@ -815,6 +815,12 @@ public class SQLController {
 		else {
 			String tmp = "no picture";
 			user.setPhoto(tmp);
+		}
+		if(psw != null)
+			user.setPassword(psw);
+		else {
+			String tmp = "";
+			user.setPassword(tmp);
 		}
 		userRepository.save(user);
 		return "Saved";
@@ -828,6 +834,7 @@ public class SQLController {
 			@RequestParam(required = false) String fname,
 			@RequestParam(required = false) String lname,
 			@RequestParam(required = false) String email,
+			@RequestParam(required = false) String psw,
 			@RequestParam(required = false) String tagline,
 			@RequestParam(required = false) String photo
 			) throws ResourceNotFoundException {
@@ -835,15 +842,17 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
 		
 		if (fname != null)
-			user.setTagline(fname);
+			user.setFname(fname);
 		if (lname != null)
-			user.setTagline(lname);
+			user.setLname(lname);
 		if (email != null)
-			user.setTagline(email);
+			user.setEmail(email);
 		if (tagline != null)
 			user.setTagline(tagline);
 		if (photo != null)
 			user.setPhoto(photo);
+		if(psw != null)
+			user.setPassword(psw);
 
 		final User updatedUser = userRepository.save(user);
 		if(updatedUser != null)
