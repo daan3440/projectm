@@ -779,8 +779,8 @@ public class SQLController {
 	}
 
 	@CrossOrigin
-	@GetMapping("userGetId")
-	public int getUserId(@PathVariable(value = "mail", required = true) String email) {
+	@GetMapping("/userGetIdByEmail")
+	public int getUserId(@PathVariable(value = "email", required = true) String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			return user.get().getId();
