@@ -777,10 +777,10 @@ public class SQLController {
 				.orElseThrow(() -> new ResourceNotFoundException("User finns inte - id :: " + id));
 		return ResponseEntity.ok().body(user);
 	}
-
+	
 	@CrossOrigin
-	@GetMapping("/userGetIdByEmail")
-	public int getUserId(@PathVariable(value = "email", required = true) String email) {
+	@GetMapping("/userGetIdByEmail/{email}")
+	public int getUserIdByEmail(@PathVariable("email") String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 		if (user.isPresent()) {
 			return user.get().getId();
