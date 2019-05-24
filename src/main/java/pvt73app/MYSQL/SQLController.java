@@ -796,9 +796,9 @@ public class SQLController {
 			@RequestParam(required = true) String fname,
 			@RequestParam(required = true) String lname,
 			@RequestParam(required = true) String email,
+			@RequestParam(required = false) String psw,
 			@RequestParam(required = false) String tagline,
-			@RequestParam(required = false) String photo,
-			@RequestParam(required = false) String psw
+			@RequestParam(required = false) String photo
 			) {
 		User user = new User();
 		user.setFname(fname);
