@@ -8,16 +8,18 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,10 +33,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Lists;
+
 import pvt73app.FTP.FTPController;
+import pvt73app.MYSQL.SQLController;
+import pvt73app.MYSQL.Trail;
+//import pvt73app.MYSQL.TrailRepository;
 
 @RestController
 public class HelloRestController {
+//	@Autowired
+	private SQLController sql;
+//	@Autowired
+//	private TrailRepository tr;
 
 //	@RequestMapping("/error")
 //	public String error() {
@@ -94,30 +105,35 @@ public class HelloRestController {
 	@CrossOrigin
 	@RequestMapping("/trailImage")
 	@ResponseBody
-	public HttpEntity<byte[]> getPhoto(@RequestParam (required=false, defaultValue="default") String id) throws IOException, URISyntaxException {
+	public HttpEntity<byte[]> getPhoto(@RequestParam(required = false, defaultValue = "default") String id)
+			throws IOException, URISyntaxException {
+		System.out.println("Anrop OK " + id);
+//		List<Trail> list = sql.getAllTrails();
+
 		File file = File.createTempFile("tmp", ".jpg");
 		if (!id.equals("default")) {
-			InputStream is = new URL(
-					String.format("http://api.stockholm.se/ServiceGuideService/ImageFiles/%s/Data?apikey=7ea7ade21aae4f7d89073bb8047d07cf", id))
-							.openStream();
+			InputStream is = new URL(String.format(
+					"http://api.stockholm.se/ServiceGuideService/ImageFiles/%s/Data?apikey=7ea7ade21aae4f7d89073bb8047d07cf",
+					id)).openStream();
 			FileUtils.copyInputStreamToFile(is, file);
 		} else {
-			file = new File("C:/Users/erikl/Pictures/Saved Pictures/fangace.png");
+			file = new File("/Volumes/Users/daniel/Images/Duck.gif");
 		}
-		
-		if(id.equals("653df67f-4859-4af3-a6f6-955a592f572d2")) {
-			FileInputStream input = new FileInputStream(file);
-			MultipartFile multipartFile = new MockMultipartFile("file",
-					file.getName(), "text/plain", IOUtils.toByteArray(input));
-			
-			RedirectAttributes reAtt = null;
-			new FTPController().handleFileUpload(multipartFile, reAtt);
-		}
-		
-//		File file = new File("src/test/resources/input.txt");
-		
-	
-		
+//				if (id.equals("9f7ee227-db45-4f54-87c9-3b39234190ef")) {
+		System.out.println("Rätt ID");
+		FileInputStream input = new FileInputStream(file);
+		MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
+//							MultipartFile multipartFile = new MockMultipartFile("file", id+".jpg", "text/plain",
+				IOUtils.toByteArray(input));
+//					RedirectAttributes reAtt = null;
+//			new FTPController().handleFileUpload(multipartFile, reAtt);
+		new FTPController().handleRawFileUpload(multipartFile, id);
+//				}
+//		for (Trail t : list) {
+//			if (!imageID.equals(t.getImage())) {
+//			}
+//		}
+
 		byte[] image = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 
 		HttpHeaders headers = new HttpHeaders();
