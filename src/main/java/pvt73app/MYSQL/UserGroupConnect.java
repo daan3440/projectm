@@ -10,11 +10,12 @@ import javax.persistence.IdClass;
 public class UserGroupConnect {
 	@Id
 	private Integer uid;
+	
 	@Id
 	private Integer gid;
 
 	public int getGid(){
-		return uid;
+		return gid;
 	}
 
 	public void setGid(int gid){

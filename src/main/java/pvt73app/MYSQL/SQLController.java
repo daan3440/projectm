@@ -610,10 +610,21 @@ public class SQLController {
 			throws ResourceNotFoundException {
 		List<UserGroupConnect> userGroupConnect = userGroupConnectRepository.findByUid(uid);
 				//.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
-		userGroupConnect.indexOf();
-		userGroupConnectRepository.delete();
+		UserGroupConnect objToBeDeleted = null;
+		for (UserGroupConnect o : userGroupConnect) {
+			if (o.getGid() == gid) {
+				objToBeDeleted = o;
+				break;
+			}
+		}
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
+		if (objToBeDeleted != null) {
+			userGroupConnectRepository.delete(objToBeDeleted);
+			response.put("deleted", Boolean.TRUE);
+
+		} else {
+			response.put("Object not found", Boolean.FALSE);
+		}
 		return response;
 	}
 	@CrossOrigin
@@ -755,10 +766,16 @@ public class SQLController {
 			//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
 			//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
 		});
-		//getUserGroupConnectByUid(id).getBody(); // TODO: Needs to return a list of all groups the user 
-												//       have get challenges connected to the said groups
+		//getUserGroupConnectByUid(id).getBody(); // This makes it get all challenges from the users trails.
 
-		userGroupConnectRepository.findByUid(id);
+		userGroupConnectRepository.findByUid(id).forEach(ugc -> {
+			System.out.println("ugc: " + ugc.getGid() + " " + ugc.getUid());
+			groupChallengeConnectRepository.findByGid(ugc.getGid()).forEach(gcc -> {
+				Integer caid = challengeRepository.findById(gcc.getCid()).get().getCaid();
+				System.out.println("gcc: gid: " + gcc.getGid() + " cid: " + gcc.getCid() + " caid: " + caid);
+				feedElements.add(challengeAttributesRepository.findById(caid).get());
+			});;
+		});
 
 		feedElements.sort(new Comparator<FeedElement>() {
 			@Override
