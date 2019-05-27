@@ -262,7 +262,7 @@ import pvt73app.ProjectmApplication;
     	 userRun.setTid(2);
     	 BigInteger bg = new BigInteger("560000000000");
     	 userRun.setTime(bg);
-    	 userRun.setUserId(1);
+    	 userRun.setUid(1);
     	 ResponseEntity<UserRuns> postResponse = restTemplate.postForEntity(getRootUrl() + "/userRuns", userRun, UserRuns.class);
     	 assertNotNull(postResponse);
     	 System.out.println(postResponse.getBody().toString());

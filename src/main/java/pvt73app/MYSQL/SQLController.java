@@ -459,7 +459,7 @@ public class SQLController {
 			){
 		LocalDateTime cdate = LocalDateTime.parse(date);
 		UserRuns userRuns = new UserRuns();
-		userRuns.setUserId(uid);
+		userRuns.setUid(uid);
 		userRuns.setTid(tid);
 		userRuns.setDate(cdate);
 		userRuns.setTime(time);
