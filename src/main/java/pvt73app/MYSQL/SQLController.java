@@ -785,11 +785,11 @@ public class SQLController {
 		//getUserGroupConnectByUid(id).getBody(); // This makes it get all challenges from the users trails.
 
 		userGroupConnectRepository.findByUid(id).forEach(ugc -> {
-			System.out.println("ugc: " + ugc.getGid() + " " + ugc.getUid());
 			groupChallengeConnectRepository.findByGid(ugc.getGid()).forEach(gcc -> {
 				Integer caid = challengeRepository.findById(gcc.getCid()).get().getCaid();
-				System.out.println("gcc: gid: " + gcc.getGid() + " cid: " + gcc.getCid() + " caid: " + caid);
-				feedElements.add(challengeAttributesRepository.findById(caid).get());
+				ChallengeAttributes ca = challengeAttributesRepository.findById(caid).get();
+				if (ca.getEnddate().isAfter(LocalDateTime.now()))
+					feedElements.add(ca);
 			});;
 		});
 

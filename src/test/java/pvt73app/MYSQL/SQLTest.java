@@ -310,6 +310,7 @@ import pvt73app.ProjectmApplication;
     	 assertEquals(review.getUid(), reviewUpdated.getUid());
     	 assertEquals(review.getDate(), reviewUpdated.getDate());
     	 assertEquals(reviewString, reviewUpdated.getReview());
+    	 restTemplate.getForObject(getRootUrl() + "/updateTrailReview?tid=" + trailId + "&uid=" + userId + "&review=" + "Det bästa som finns!", String.class);
     	 
      }
 	 
