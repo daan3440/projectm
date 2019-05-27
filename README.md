@@ -49,7 +49,7 @@ String | /addUserGroup | int uid, String groupname
 String | /updateUserGroup | int id, ? String groupname
 Map<String, Boolean> | /deleteUserGroup/{id} | int id
 List<UserGroupConnect> | /userGroupConnect 
-ResponseEntity<UserGroupConnect> | /userGroupConnect/{uid} | int uid
+ResponseEntity<List<UserGroupConnect> | /userGroupConnect/{uid} | int uid
 String | /addUserGroupConnect | int uid, int gid
 Map<String, Boolean> | /deleteUserGroupConnect/{uid} | int uid
 List<UserAdminGroup> | /userAdminGroup 
