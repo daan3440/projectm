@@ -292,6 +292,26 @@ import pvt73app.ProjectmApplication;
     		 assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
     	 }
 	 }
+     
+     @Test
+     public void testUpdateTrailReview() {
+    	 int userId = 12;
+    	 int trailId = 13;
+    	 String reviewString = "This is a new review";
+    	 TrailReview review = restTemplate.getForObject(getRootUrl() + "/userTrailReview/" + trailId + "/" + userId, TrailReview.class);
+    	 assertNotNull(review);
+    	 String response = restTemplate.getForObject(getRootUrl() + "/updateTrailReview?tid=" + trailId + "&uid=" + userId + "&review=" + reviewString, String.class);
+    	 assertEquals(response, "Updated");
+    	 TrailReview reviewUpdated = restTemplate.getForObject(getRootUrl() + "/userTrailReview/" + trailId + "/" + userId, TrailReview.class);
+    	 assertNotNull(review);
+    	 
+    	 //System.err.println("THIS IS TEST \n\n\n\n" + review.getReview());
+    	 assertEquals(review.getTid(), reviewUpdated.getTid());
+    	 assertEquals(review.getUid(), reviewUpdated.getUid());
+    	 assertEquals(review.getDate(), reviewUpdated.getDate());
+    	 assertEquals(reviewString, reviewUpdated.getReview());
+    	 
+     }
 	 
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
 //	 public void testGettingFavTrails() {

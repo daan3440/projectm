@@ -354,6 +354,21 @@ public class SQLController {
 		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
 		return ResponseEntity.ok().body(trailReview);
 	}
+	
+	@CrossOrigin
+	@GetMapping(value = "/userTrailReview/{tid}/{uid}")
+	public ResponseEntity<TrailReview> getUsersTrailReview(@PathVariable(value = "tid", required = true) int tid,
+														   @PathVariable(value = "uid", required = true) int uid) {
+		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
+		System.err.println("\n\n"+trailReview + "\n\n");
+		for (TrailReview tr : trailReview) {
+			if (tr.getUid() == uid) {
+				return ResponseEntity.ok().body(tr);
+			}
+		}
+		//return ResponseEntity.of(Optional.empty());
+		return ResponseEntity.ok().body(null);
+	}
 	@CrossOrigin
 	@RequestMapping(value = "/addTrailReview", method = RequestMethod.GET)
 	public @ResponseBody String createTrailReview(
@@ -391,14 +406,15 @@ public class SQLController {
 		trailReview.removeIf(tr -> tr.getUid() != uid);
 		// TODO: Should it not be uid and tid together that finds the correct review and not only the tid? 
 		// signed: Anton	
-
-		LocalDateTime cdate = LocalDateTime.parse(date);
+		
 		if(review != null)
-			trailReview.get(0).setReview(review);
+		trailReview.get(0).setReview(review);
 		if(rating != null)
-			trailReview.get(0).setRating(rating);
-		if(date!= null)
+		trailReview.get(0).setRating(rating);
+		if(date!= null) {
+			LocalDateTime cdate = LocalDateTime.parse(date);
 			trailReview.get(0).setDate(cdate);
+		}
 		if(title != null)
 			trailReview.get(0).setTitle(title);
 
