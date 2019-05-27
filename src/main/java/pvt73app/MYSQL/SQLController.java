@@ -104,9 +104,9 @@ public class SQLController {
 	@RequestMapping(value = "/updateChallenge", method = RequestMethod.GET)
 	public @ResponseBody String updateChallenge(
 			@RequestParam(required = true) int id,
-			Integer tid,
-			Integer caid,
-			String name) throws ResourceNotFoundException {
+			@RequestParam(required = false) Integer tid,
+			@RequestParam(required = false) Integer caid,
+			@RequestParam(required = false) String name) throws ResourceNotFoundException {
 		Challenge challenge = challengeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Utmaning finns inte - id :: " + id));
 

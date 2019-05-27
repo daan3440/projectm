@@ -1,5 +1,7 @@
 package pvt73app.MYSQL;
 
+import static org.assertj.core.api.Assertions.anyOf;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -311,6 +313,45 @@ import pvt73app.ProjectmApplication;
     	 assertEquals(review.getDate(), reviewUpdated.getDate());
     	 assertEquals(reviewString, reviewUpdated.getReview());
     	 restTemplate.getForObject(getRootUrl() + "/updateTrailReview?tid=" + trailId + "&uid=" + userId + "&review=" + "Det bästa som finns!", String.class);
+    	 
+     }
+     
+     @Test
+     public void testHejSQL() {
+    	 String expectedString = "SQL up!";
+    	 String response = restTemplate.getForObject(getRootUrl() + "/hejSQL", String.class);
+    	 assertEquals(expectedString, response);
+     }
+     
+     @Test
+     public void testAddChallenge() {
+    	 int tid = 12;
+    	 int caid = 1;
+    	 String name = "Test Challenge";
+    	 Challenge testChallenge = new Challenge();
+    	 testChallenge.setCaid(caid);
+    	 testChallenge.setTid(tid);
+    	 testChallenge.setName(name);
+    	 String response = restTemplate.getForObject(getRootUrl() + "/addChallenge?tid=" + tid + "&caid=" + caid + "&name=" + name, String.class);
+    	 assertNotNull(response);
+    	 assertEquals("Saved", response);
+     }
+     
+     @Test
+     public void testUpdateExistingChallenge() {
+    	 int cid = 1;
+    	 String newName = "New name";
+    	 Challenge chall = restTemplate.getForObject(getRootUrl() + "/challenge/" + cid, Challenge.class);
+    	 String strResponse = restTemplate.getForObject(getRootUrl() + "/updateChallenge?id=" + cid + "&name=" + newName, String.class);
+    	 assertNotNull(strResponse);
+    	 assertEquals("Updated", strResponse);
+    	 
+    	 Challenge newChall = restTemplate.getForObject(getRootUrl() + "/challenge/" + cid, Challenge.class);
+    	 assertEquals(newName, newChall.getName());
+     }
+     
+     @Test
+     public void testRemoveChallenge() {
     	 
      }
 	 
