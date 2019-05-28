@@ -121,18 +121,18 @@ public class HelloRestController {
 		}
 //				if (id.equals("9f7ee227-db45-4f54-87c9-3b39234190ef")) {
 		System.out.println("Rätt ID");
-		FileInputStream input = new FileInputStream(file);
-		MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
-//							MultipartFile multipartFile = new MockMultipartFile("file", id+".jpg", "text/plain",
-				IOUtils.toByteArray(input));
-//					RedirectAttributes reAtt = null;
-//			new FTPController().handleFileUpload(multipartFile, reAtt);
-		new FTPController().handleRawFileUpload(multipartFile, id);
-//				}
-//		for (Trail t : list) {
-//			if (!imageID.equals(t.getImage())) {
-//			}
-//		}
+//		FileInputStream input = new FileInputStream(file);
+//		MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
+////							MultipartFile multipartFile = new MockMultipartFile("file", id+".jpg", "text/plain",
+//				IOUtils.toByteArray(input));
+////					RedirectAttributes reAtt = null;
+////			new FTPController().handleFileUpload(multipartFile, reAtt);
+//		new FTPController().handleRawFileUpload(multipartFile, id);
+////				}
+////		for (Trail t : list) {
+////			if (!imageID.equals(t.getImage())) {
+////			}
+////		}
 
 		byte[] image = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 
