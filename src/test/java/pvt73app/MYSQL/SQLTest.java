@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -174,7 +175,7 @@ import pvt73app.ProjectmApplication;
      }
      
      @Test
-     public void testUpdateUser() {
+     public void testUpdateUserOldVer() {
     	 String email = "test@emailer.se";
     	 User user = restTemplate.getForObject(getRootUrl() + "/users/" + email, User.class);
     	 user.setFname("Lindas Lovelacer");
@@ -342,6 +343,7 @@ import pvt73app.ProjectmApplication;
     	 int cid = 1;
     	 String newName = "New name";
     	 Challenge chall = restTemplate.getForObject(getRootUrl() + "/challenge/" + cid, Challenge.class);
+    	 assertNotNull(chall);
     	 String strResponse = restTemplate.getForObject(getRootUrl() + "/updateChallenge?id=" + cid + "&name=" + newName, String.class);
     	 assertNotNull(strResponse);
     	 assertEquals("Updated", strResponse);
@@ -350,9 +352,152 @@ import pvt73app.ProjectmApplication;
     	 assertEquals(newName, newChall.getName());
      }
      
-     @Test
+     //@Test
      public void testRemoveChallenge() {
+    	 int cid = 1;
     	 
+    	 Challenge chall = restTemplate.getForObject(getRootUrl() + "challenge/" + cid, Challenge.class);
+    	 assertNotNull(chall);
+    	 
+    	 Map<String, Boolean> objMap = restTemplate.getForObject(getRootUrl() + "/deleteChallenge/" + cid, Map.class);
+    	 assertEquals(Boolean.TRUE, objMap.get("deleted"));
+    	 
+     }
+     
+     @Test
+     public void testAddNewGroup() {
+    	int uid = 11;
+    	String name = "Testing group";
+    	String response = restTemplate.getForObject(getRootUrl() + "/addUserGroup?uid=" + uid + "&groupname=" + name, String.class);
+    	assertNotNull(response);
+    	assertEquals("Saved", response);
+     }
+     
+     @Test
+     public void testAddNewChallengeAttribute() {
+    	 
+     }
+     
+     @Test
+     public void testUserFeed() {
+    	 int uid = 12;
+    	 int uid2 = 11;
+    	 List<FeedElement> lst = restTemplate.getForObject(getRootUrl() + "/userFeed/" + uid, List.class);
+    	 assertNotNull(lst);
+    	 lst = restTemplate.getForObject(getRootUrl() + "/userFeed/" + uid2, List.class);
+    	 assertNotNull(lst);
+     }
+     
+     @Test
+     public void testTrailsSortedByLocation() {
+    	 Iterable<Trail> list = restTemplate.getForObject(getRootUrl() + "/allTrailsSortedByLocation?lat=" + 1 + "&lon=" + 1, Iterable.class);
+    	 assertNotNull(list);
+     }
+     
+     @Test
+     public void testAllTrailsByName() {
+    	 List<Trail> lst = restTemplate.getForObject(getRootUrl() + "/allTrails", List.class);
+    	 assertNotNull(lst);
+     }
+     
+     @Test
+     public void testAddFavourite() {
+    	 int uid = 7;
+    	 int tid = 12;
+    	 UserTrails lst = restTemplate.getForObject(getRootUrl() + "/addFavourite?uid=" + uid + "&tid=" + tid, UserTrails.class);
+    	 assertNotNull(lst);
+     }
+     
+     @Test
+     public void testUpdateUser() {
+    	int uid = 11;
+    	
+    	User user = restTemplate.getForObject(getRootUrl() + "/user/" + uid, User.class);
+    	assertNotNull(user);
+    	assertEquals("Erik", user.getFname());
+    	assertEquals("Vikström", user.getLname());
+    	assertEquals("don@doing.se", user.getEmail());
+    	
+    	
+    	String response = restTemplate.getForObject(getRootUrl() + "/updateUser?id=" + uid + "&fname=Anton&lname=Harneby&email=No@No.nu", String.class);
+    	assertNotNull(response);
+    	response = restTemplate.getForObject(getRootUrl() + "/updateUser?id=" + uid + "&fname=Erik&lname=Vikström&email=don@doing.se", String.class);
+    	assertNotNull(response);
+    	
+    	user = restTemplate.getForObject(getRootUrl() + "/user/" + uid, User.class);
+    	assertNotNull(user);
+    	assertEquals("Erik", user.getFname());
+    	assertEquals("Vikström", user.getLname());
+    	assertEquals("don@doing.se", user.getEmail());
+    	    	
+    	response = restTemplate.getForObject(getRootUrl() + "/updateUser?id=" + uid + "&tagline=Hi", String.class);
+    	assertNotNull(response);
+    	user = restTemplate.getForObject(getRootUrl() + "/user/" + uid, User.class);
+    	assertNotNull(user);
+    	assertEquals("Hi", user.getTagline());
+    	
+    	response = restTemplate.getForObject(getRootUrl() + "/updateUser?id=" + uid + "&tagline=", String.class);
+    	assertNotNull(response);
+    	user = restTemplate.getForObject(getRootUrl() + "/user/" + uid, User.class);
+    	assertNotNull(user);
+    	assertEquals("", user.getTagline());
+     }
+     
+     @Test
+     public void testAddAndRemoveUser() {
+    	 String fname = "TestF";
+    	 String lname = "TestL";
+    	 String email = "Test@Test.test";
+    	 String tagline = "TestTag";
+    	 String psw = "Secret";
+    	 String response = restTemplate.getForObject(getRootUrl() + "/addUser?fname=" + fname + "&lname=" + lname + "&email=" + email 
+    			 									 + "&tagline=" + tagline + "&psw=" + psw, String.class);
+    	 assertNotNull(response);
+    	 
+    	 int id = restTemplate.getForObject(getRootUrl() + "/userGetIdByEmail/" + email, Integer.class);
+    	 User user = restTemplate.getForObject(getRootUrl() + "/user/" + id, User.class);
+    	 assertNotNull(user);
+    	 assertEquals(email, user.getEmail());
+    	 
+    	 Map<String, Boolean> map = restTemplate.getForObject(getRootUrl() + "/deleteUser/" + id, Map.class);
+    	 assertNotNull(map);
+    	 assertEquals(Boolean.TRUE, map.get("deleted"));
+    	 
+    	 id  = restTemplate.getForObject(getRootUrl() + "/userGetIdByEmail/" + email, Integer.class);
+    	 
+    	 assertEquals(-1, id);
+    	 
+     }
+     
+     @Test
+     public void testAddTrails() {
+    	 String response = restTemplate.getForObject(getRootUrl() + "/addTrails", String.class);
+    	 assertNotNull(response);
+    	 //assertEquals("All trails added", response);
+     }
+     
+     @Test
+     public void testGetAllUsersNew() {
+    	 Iterable<User> users = restTemplate.getForObject(getRootUrl() + "/allUsers", Iterable.class);
+    	 assertNotNull(users);
+     }
+     
+     @Test
+     public void testGetAllGroups() {
+    	 Iterable<UserGroup> users = restTemplate.getForObject(getRootUrl() + "/allGroups", Iterable.class);
+    	 assertNotNull(users);
+     }
+     
+     @Test
+     public void testGetAllUsersSecond() {
+    	 List<User> users = restTemplate.getForObject(getRootUrl() + "/allUser", List.class);
+    	 assertNotNull(users);
+     }
+     
+     @Test
+     public void testGetAllFavTrails() {
+    	 
+    	 //"/usersFavTrails/{uid}"
      }
 	 
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
