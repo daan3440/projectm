@@ -365,7 +365,7 @@ import pvt73app.ProjectmApplication;
      }
      
      @Test
-     public void testAddNewGroup() {
+     public void testAddNewGroup() { // TODO: Make it remove the group after
     	int uid = 11;
     	String name = "Testing group";
     	String response = restTemplate.getForObject(getRootUrl() + "/addUserGroup?uid=" + uid + "&groupname=" + name, String.class);
@@ -549,6 +549,11 @@ import pvt73app.ProjectmApplication;
      public void testAllGroupConnections() {
     	 List<UserGroupConnect> list = restTemplate.getForObject(getRootUrl() + "/userGroupConnect", List.class);
     	 assertNotNull(list);
+     }
+     
+     @Test
+     public void testUpdateUserGroup() {
+    	 
      }
      
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
