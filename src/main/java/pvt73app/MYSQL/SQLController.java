@@ -448,7 +448,7 @@ public class SQLController {
 		return leaderboard;
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/addUserRun", method = RequestMethod.GET)
+	@RequestMapping(value = "/addUserRun", method = RequestMethod.POST)
 	public @ResponseBody String createUserRuns(
 			@RequestParam(required = true) int uid,
 			@RequestParam(required = true) int tid,
