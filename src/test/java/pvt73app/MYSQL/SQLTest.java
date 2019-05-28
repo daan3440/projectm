@@ -496,7 +496,9 @@ import pvt73app.ProjectmApplication;
      
      @Test
      public void testGetAllFavTrails() {
-    	 
+    	 int uid = 12;
+    	 UserTrails list = restTemplate.getForObject(getRootUrl() + "/usersFavTrails" + uid, UserTrails.class);
+    	 assertNotNull(list);
     	 //"/usersFavTrails/{uid}"
      }
 	 
