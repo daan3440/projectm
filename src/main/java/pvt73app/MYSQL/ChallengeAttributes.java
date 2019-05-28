@@ -11,7 +11,7 @@ import javax.persistence.Id;
 
 // This tells Hibernate to make a table out of this class
 @Entity(name = "challengeattributes")
-public class ChallengeAttributes {
+public class ChallengeAttributes implements FeedElement {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
@@ -76,6 +76,11 @@ public class ChallengeAttributes {
 	
 	public void setComplete(boolean complete){
 		this.complete=complete;
+	}
+
+	@Override
+	public LocalDateTime getDate() {
+		return getStartdate();
 	}
 
 	

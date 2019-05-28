@@ -262,7 +262,7 @@ import pvt73app.ProjectmApplication;
     	 userRun.setTid(2);
     	 BigInteger bg = new BigInteger("560000000000");
     	 userRun.setTime(bg);
-    	 userRun.setUserId(1);
+    	 userRun.setUid(1);
     	 ResponseEntity<UserRuns> postResponse = restTemplate.postForEntity(getRootUrl() + "/userRuns", userRun, UserRuns.class);
     	 assertNotNull(postResponse);
     	 System.out.println(postResponse.getBody().toString());
@@ -292,6 +292,27 @@ import pvt73app.ProjectmApplication;
     		 assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
     	 }
 	 }
+     
+     @Test
+     public void testUpdateTrailReview() {
+    	 int userId = 12;
+    	 int trailId = 13;
+    	 String reviewString = "This is a new review";
+    	 TrailReview review = restTemplate.getForObject(getRootUrl() + "/userTrailReview/" + trailId + "/" + userId, TrailReview.class);
+    	 assertNotNull(review);
+    	 String response = restTemplate.getForObject(getRootUrl() + "/updateTrailReview?tid=" + trailId + "&uid=" + userId + "&review=" + reviewString, String.class);
+    	 assertEquals(response, "Updated");
+    	 TrailReview reviewUpdated = restTemplate.getForObject(getRootUrl() + "/userTrailReview/" + trailId + "/" + userId, TrailReview.class);
+    	 assertNotNull(review);
+    	 
+    	 //System.err.println("THIS IS TEST \n\n\n\n" + review.getReview());
+    	 assertEquals(review.getTid(), reviewUpdated.getTid());
+    	 assertEquals(review.getUid(), reviewUpdated.getUid());
+    	 assertEquals(review.getDate(), reviewUpdated.getDate());
+    	 assertEquals(reviewString, reviewUpdated.getReview());
+    	 restTemplate.getForObject(getRootUrl() + "/updateTrailReview?tid=" + trailId + "&uid=" + userId + "&review=" + "Det bästa som finns!", String.class);
+    	 
+     }
 	 
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
 //	 public void testGettingFavTrails() {

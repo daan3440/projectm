@@ -34,11 +34,11 @@ public class UserRuns implements FeedElement{
 		this.tid=tid;
 	}
 	
-	public int getUserId(){
+	public int getUid(){
 		return uid;
 	}
 
-	public void setUserId(int uid){
+	public void setUid(int uid){
 		this.uid=uid;
 	}
 	

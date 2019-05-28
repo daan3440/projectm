@@ -354,6 +354,21 @@ public class SQLController {
 		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
 		return ResponseEntity.ok().body(trailReview);
 	}
+	
+	@CrossOrigin
+	@GetMapping(value = "/userTrailReview/{tid}/{uid}")
+	public ResponseEntity<TrailReview> getUsersTrailReview(@PathVariable(value = "tid", required = true) int tid,
+														   @PathVariable(value = "uid", required = true) int uid) {
+		List<TrailReview> trailReview = trailReviewRepository.findByTid(tid);
+		System.err.println("\n\n"+trailReview + "\n\n");
+		for (TrailReview tr : trailReview) {
+			if (tr.getUid() == uid) {
+				return ResponseEntity.ok().body(tr);
+			}
+		}
+		//return ResponseEntity.of(Optional.empty());
+		return ResponseEntity.ok().body(null);
+	}
 	@CrossOrigin
 	@RequestMapping(value = "/addTrailReview", method = RequestMethod.GET)
 	public @ResponseBody String createTrailReview(
@@ -391,14 +406,15 @@ public class SQLController {
 		trailReview.removeIf(tr -> tr.getUid() != uid);
 		// TODO: Should it not be uid and tid together that finds the correct review and not only the tid? 
 		// signed: Anton	
-
-		LocalDateTime cdate = LocalDateTime.parse(date);
+		
 		if(review != null)
-			trailReview.get(0).setReview(review);
+		trailReview.get(0).setReview(review);
 		if(rating != null)
-			trailReview.get(0).setRating(rating);
-		if(date!= null)
+		trailReview.get(0).setRating(rating);
+		if(date!= null) {
+			LocalDateTime cdate = LocalDateTime.parse(date);
 			trailReview.get(0).setDate(cdate);
+		}
 		if(title != null)
 			trailReview.get(0).setTitle(title);
 
@@ -459,7 +475,7 @@ public class SQLController {
 			){
 		LocalDateTime cdate = LocalDateTime.parse(date);
 		UserRuns userRuns = new UserRuns();
-		userRuns.setUserId(uid);
+		userRuns.setUid(uid);
 		userRuns.setTid(tid);
 		userRuns.setDate(cdate);
 		userRuns.setTime(time);
@@ -583,10 +599,10 @@ public class SQLController {
 	}
 	@CrossOrigin
 	@GetMapping("/userGroupConnect/{uid}")
-	public ResponseEntity<UserGroupConnect> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
+	public ResponseEntity<List<UserGroupConnect>> getUserGroupConnectByUid(@PathVariable(value = "uid") int uid)
 			throws ResourceNotFoundException {
-		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
+		List<UserGroupConnect> userGroupConnect = userGroupConnectRepository.findByUid(uid);
+				//.orElseThrow(() -> new ResourceNotFoundException("UserGroupConnect finns inte - uid :: " + uid));
 		return ResponseEntity.ok().body(userGroupConnect);
 	}
 	@CrossOrigin
@@ -606,13 +622,26 @@ public class SQLController {
 
 	//    @DeleteMapping("/userGroupConnectattributes/{id}")
 	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
-	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid") int uid)
+	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid", required = true) int uid, 
+													   @PathVariable(value = "gid", required = true) int gid)
 			throws ResourceNotFoundException {
-		UserGroupConnect userGroupConnect = userGroupConnectRepository.findByUid(uid)
-				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
-		userGroupConnectRepository.delete(userGroupConnect);
+		List<UserGroupConnect> userGroupConnect = userGroupConnectRepository.findByUid(uid);
+				//.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - uid :: " + uid));
+		UserGroupConnect objToBeDeleted = null;
+		for (UserGroupConnect o : userGroupConnect) {
+			if (o.getGid() == gid) {
+				objToBeDeleted = o;
+				break;
+			}
+		}
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
+		if (objToBeDeleted != null) {
+			userGroupConnectRepository.delete(objToBeDeleted);
+			response.put("deleted", Boolean.TRUE);
+
+		} else {
+			response.put("Object not found", Boolean.FALSE);
+		}
 		return response;
 	}
 	@CrossOrigin
@@ -750,15 +779,28 @@ public class SQLController {
 		getUserTrailsById(id).getBody().forEach(ut ->  {
 			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
 			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
+			
+			//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
+			//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
+		});
+		//getUserGroupConnectByUid(id).getBody(); // This makes it get all challenges from the users trails.
+
+		userGroupConnectRepository.findByUid(id).forEach(ugc -> {
+			groupChallengeConnectRepository.findByGid(ugc.getGid()).forEach(gcc -> {
+				Integer caid = challengeRepository.findById(gcc.getCid()).get().getCaid();
+				ChallengeAttributes ca = challengeAttributesRepository.findById(caid).get();
+				if (ca.getEnddate().isAfter(LocalDateTime.now()))
+					feedElements.add(ca);
+			});;
 		});
 
 		feedElements.sort(new Comparator<FeedElement>() {
 			@Override
 			public int compare(FeedElement fe1, FeedElement fe2) {
-				return fe1.getDate().compareTo(fe2.getDate()) * -1;
+				return fe1.getDate().compareTo(fe2.getDate()) * -1; // compareTo sorts old to new and (* -1) reverses the order its sorted to new to old.
 			}
 		});
-		return ResponseEntity.ok().body(feedElements.subList(0, (feedElements.size() > 100 ? 100 : feedElements.size())));
+		return ResponseEntity.ok().body(feedElements.subList(0, (feedElements.size() > 100 ? 100 : feedElements.size()))); // Looks at the static size() if its above 100 in size and returns a sublist that is 100 or less in size.
 	}
 
 	// FEED END
