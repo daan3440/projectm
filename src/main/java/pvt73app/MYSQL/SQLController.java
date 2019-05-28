@@ -758,12 +758,18 @@ public class SQLController {
 	}
 
 	//    @DeleteMapping("/userTrailsattributes/{id}")
-	@RequestMapping(value = "/deleteUserTrails/{id}", method = RequestMethod.GET)
-	public Map<String, Boolean> deleteUserTrails(@PathVariable(value = "id") int id)
+	@RequestMapping(value = "/deleteUserTrails", method = RequestMethod.GET)
+	public Map<String, Boolean> deleteUserTrails(@RequestParam(required = true) int uid, 
+												 @RequestParam(required = true) int tid)
 			throws ResourceNotFoundException {
-		UserTrails userTrails = userTrailsRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
-		userTrailsRepository.delete(userTrails);
+		//UserTrails userTrails = userTrailsRepository.findById(id)
+		//		.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
+		List<UserTrails> list = userTrailsRepository.findByUid(uid);
+		for (UserTrails ut : list) {
+			if (ut.getTid() == tid) {
+				userTrailsRepository.delete(ut);
+			}
+		}
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

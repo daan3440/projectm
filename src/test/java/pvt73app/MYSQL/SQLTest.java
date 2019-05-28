@@ -501,7 +501,56 @@ import pvt73app.ProjectmApplication;
     	 assertNotNull(list);
     	 //"/usersFavTrails/{uid}"
      }
+     
+     @Test
+     public void testAllUserTrails() {
+    	 List<UserTrails> lst = restTemplate.getForObject(getRootUrl() + "/userTrails", List.class);
+    	 assertNotNull(lst);
+     }
 	 
+     @Test
+     public void testUsersFavTrails() {
+    	 int uid = 12;
+    	 
+    	 List<UserTrails> lst = restTemplate.getForObject(getRootUrl() + "/usersFavTrails/" + uid, List.class);
+    	 assertNotNull(lst);
+     }
+     
+     @Test
+     public void testAddAndRemoveUserTrail() {
+    	 int tid = 10;
+    	 int uid = 3;
+    	 boolean favortite = false;
+    	 
+    	 String response = restTemplate.getForObject(getRootUrl() + "/addUserTrails?tid=" + tid + "&uid=" + uid + "&favourite=" + favortite, String.class);
+    	 assertNotNull(response);
+    	 
+    	 response = restTemplate.getForObject(getRootUrl() + "/updateUserTrails?tid=" + tid + "&uid=" + uid + "&favourite=true", String.class);
+    	 assertNotNull(response);
+    	 
+    	 Map<String, Boolean> map = restTemplate.getForObject(getRootUrl() + "/deleteUserTrails?tid=" + tid + "&uid=" + uid, Map.class);
+    	 assertNotNull(map);
+    	 assertEquals(Boolean.TRUE, map.get("deleted"));
+     }
+     
+     //@Test
+     public void testAddFav() { //TODO: find a way to make ut work here
+    	 int uid = 3;
+    	 int tid = 12;
+    	 
+    	 ResponseEntity<List<UserTrails>> ut = restTemplate.getForObject(getRootUrl() + "/addFavourite?uid=" + uid + "&tid=" + tid, ResponseEntity.class);
+    	 assertNotNull(ut);
+    	 
+    	 String response = restTemplate.getForObject(getRootUrl() + "/updateUserTrails?tid=" + tid + "&uid=" + uid + "&favourite=false", String.class);
+    	 assertNotNull(response);
+     }
+     
+     @Test
+     public void testAllGroupConnections() {
+    	 List<UserGroupConnect> list = restTemplate.getForObject(getRootUrl() + "/userGroupConnect", List.class);
+    	 assertNotNull(list);
+     }
+     
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
 //	 public void testGettingFavTrails() {
 //		 int id = 12;
