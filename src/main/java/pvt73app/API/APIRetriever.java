@@ -16,13 +16,49 @@ import pvt73app.MYSQL.Trail;
 public class APIRetriever {
 	private static final String API_KEY = "7ea7ade21aae4f7d89073bb8047d07cf";
 	private static final String ENDPOINT = "http://api.stockholm.se/ServiceGuideService/";
+	
+	private static final String VALUES = "Values";
+	private static final String VALUE = "Value";
+	private static final String DEFAULT_DECSRIPTION = "Beskrivning saknas";
+	
+	//URL för att hämta alla trails
 	private static final String TRAILS_URL = ENDPOINT
 			+ "ServiceUnitTypes/a4116a6a-af53-4672-b492-01d7adeae987/ServiceUnits/json?apikey=" + API_KEY;
+	//URL för att hämta ett spår
 	private static final String TRAIL_URL = ENDPOINT + "ServiceUnits/%s/Attributes/json?apikey=" + API_KEY;
+	//URL för att hämta ett spårs stadsdel
 	private static final String TRAIL_LOCATION = ENDPOINT + "ServiceUnits/%s/GeographicalAreas/json?apikey=" + API_KEY;
 
 	private ObjectMapper mapper = new ObjectMapper();
+	
+	//Hämtar lista alla spår med attributer lagda.
+	public List<TrailDTO> getTrails() {
+		List<TrailDTO> trails = getTrailsFromApi();
 
+		for (TrailDTO trail : trails) {
+			List<TrailAttributeDTO> attributes = getTrailAttributesFromApi(trail.getId());
+			trail.setLocation(getTrailLocationFromApi(trail.getId()));
+			trail.createWGS84GeoLocation();
+
+			for (TrailAttributeDTO attribute : attributes) {
+				if (isAttributeDescription(attribute) && attribute instanceof TrailAttributeStringValueDTO) {
+					TrailAttributeStringValueDTO trailStringAttribute = (TrailAttributeStringValueDTO) attribute;
+					trail.setDescription(trailStringAttribute.getValue());
+				} else if (isAttributeImage(attribute) && attribute instanceof TrailAttributeObjectValueDTO) {
+					TrailAttributeObjectValueDTO objectAttribute = (TrailAttributeObjectValueDTO) attribute;
+					trail.setImageId(objectAttribute.getValue().get("Id"));
+				}
+			}
+
+			if (trail.getDescription() == null) {
+				trail.setDescription(DEFAULT_DECSRIPTION);
+			}
+		}
+
+		return trails;
+	}
+
+	//Tar in spåren från Stockholms API
 	public List<TrailDTO> getTrailsFromApi() {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<TrailDTO[]> responseEntity = restTemplate.getForEntity(TRAILS_URL, TrailDTO[].class);
@@ -30,6 +66,7 @@ public class APIRetriever {
 		return Arrays.asList(objects);
 	}
 
+	//Tar in ett spårs attribut från Stockholms API
 	public List<TrailAttributeDTO> getTrailAttributesFromApi(String id) {
 		List<TrailAttributeDTO> attributes = new ArrayList<>();
 		String url = String.format(TRAIL_URL, id);
@@ -38,7 +75,7 @@ public class APIRetriever {
 		JsonNode[] objects = responseEntity.getBody();
 
 		for (JsonNode node : objects) {
-			JsonNode value = node.get("Value");
+			JsonNode value = node.get(VALUE);
 
 			try {
 				if (value != null) {
@@ -48,7 +85,7 @@ public class APIRetriever {
 						attributes.add(mapper.treeToValue(node, TrailAttributeObjectValueDTO.class));
 					}
 				} else {
-					value = node.get("Values");
+					value = node.get(VALUES);
 					if (value != null && value.isArray()) {
 						attributes.add(mapper.treeToValue(node, TrailAttributeValuesArrayDTO.class));
 					}
@@ -61,32 +98,6 @@ public class APIRetriever {
 		return attributes;
 	}
 
-	public List<TrailDTO> getTrails() {
-		List<TrailDTO> trails = getTrailsFromApi();
-
-		for (TrailDTO t : trails) {
-			List<TrailAttributeDTO> attributes = getTrailAttributesFromApi(t.getId());
-			t.setLocation(getTrailLocationFromApi(t.getId()));
-			t.createWGS84GeoLocation();
-
-			for (TrailAttributeDTO attribute : attributes) {
-				if (isAttributeDescription(attribute) && attribute instanceof TrailAttributeStringValueDTO) {
-					TrailAttributeStringValueDTO tv = (TrailAttributeStringValueDTO) attribute;
-					t.setDescription(tv.getValue());
-				} else if (isAttributeImage(attribute) && attribute instanceof TrailAttributeObjectValueDTO) {
-					TrailAttributeObjectValueDTO objectAttribute = (TrailAttributeObjectValueDTO) attribute;
-					t.setImageId(objectAttribute.getValue().get("Id"));
-				}
-			}
-
-			if (t.getDescription() == null) {
-				t.setDescription("Beskrivning saknas");
-			}
-		}
-
-		return trails;
-	}
-
 	private boolean isAttributeImage(TrailAttributeDTO attribute) {
 		return attribute.getGroup().equals("Bilder och film") && attribute.getName().equals("Huvudbild");
 	}
@@ -96,6 +107,7 @@ public class APIRetriever {
 				&& attribute.getName().equals("Introduktion");
 	}
 
+	//Tar in ett spårs stadsdel från Stockholms API
 	public String getTrailLocationFromApi(String trailId) {
 		String locationUrl = String.format(TRAIL_LOCATION, trailId);
 		RestTemplate restTemplate = new RestTemplate();
@@ -118,6 +130,7 @@ public class APIRetriever {
 		return locationName;
 	}
 
+	//används enbart för test
 	public String getIdUrl(String id) {
 		return String.format(TRAIL_URL, id);
 	}
