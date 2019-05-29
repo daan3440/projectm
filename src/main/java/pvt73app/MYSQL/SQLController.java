@@ -802,6 +802,43 @@ public class SQLController {
 		});
 		return ResponseEntity.ok().body(feedElements.subList(0, (feedElements.size() > 100 ? 100 : feedElements.size()))); // Looks at the static size() if its above 100 in size and returns a sublist that is 100 or less in size.
 	}
+	
+	@CrossOrigin
+	@GetMapping("/userFeed/")
+	public ResponseEntity<List<FeedElement>> getGlobalUserFeed()
+			throws ResourceNotFoundException {
+		List<FeedElement> feedElements = new ArrayList<>();
+		feedElements.addAll((List<UserRuns>) userRunsRepository.findAll());
+		feedElements.addAll((List<TrailReview>)trailReviewRepository.findAll());
+//		getUserTrailsById(id).getBody().forEach(ut ->  { // OLD
+//			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
+//			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
+//		});
+//		userGroupConnectRepository.findByUid(id).forEach(ugc -> { // OLD
+//			groupChallengeConnectRepository.findByGid(ugc.getGid()).forEach(gcc -> {
+//				Integer caid = challengeRepository.findById(gcc.getCid()).get().getCaid();
+//				ChallengeAttributes ca = challengeAttributesRepository.findById(caid).get();
+//				if (ca.getEnddate().isAfter(LocalDateTime.now()))
+//					feedElements.add(ca);
+//			});;
+//		});
+		
+//		((List<ChallengeAttributes>)challengeAttributesRepository.findAll()).forEach(ca -> { // TODO: This is the new way it does not work right now
+//			if (ca.getEnddate().isAfter(LocalDateTime.now())) {
+//				feedElements.add(ca);
+//			}
+//		});
+		
+		//feedElements.addAll((List<ChallengeAttributes>)challengeAttributesRepository.findAll());
+
+		feedElements.sort(new Comparator<FeedElement>() {
+			@Override
+			public int compare(FeedElement fe1, FeedElement fe2) {
+				return fe1.getDate().compareTo(fe2.getDate()) * -1; // compareTo sorts old to new and (* -1) reverses the order its sorted to new to old.
+			}
+		});
+		return ResponseEntity.ok().body(feedElements.subList(0, (feedElements.size() > 100 ? 100 : feedElements.size()))); // Looks at the static size() if its above 100 in size and returns a sublist that is 100 or less in size.
+	}
 
 	// FEED END
 
