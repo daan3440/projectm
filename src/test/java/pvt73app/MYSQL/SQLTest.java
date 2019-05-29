@@ -583,6 +583,17 @@ import pvt73app.ProjectmApplication;
     	 assertNotNull(list);
      }
      
+     @Test
+     public void testGetDistance() {
+    	 int x1 = 0;
+    	 int y1 = 0;
+    	 int x2 = 0;
+    	 int y2 = 5;
+    	 double dist = restTemplate.getForObject(getRootUrl() +  "/getDistance?x1=" + x1 + "&y1=" + y1 + "&x2=" + x2 + "&y2=" + y2, Double.class);
+    	 
+    	 assertEquals(556d, dist, 0.1d);
+     }
+     
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct
 //	 public void testGettingFavTrails() {
 //		 int id = 12;

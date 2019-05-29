@@ -990,22 +990,22 @@ public class SQLController {
 		return trails;
 	}
 
-	@CrossOrigin
-	@GetMapping(path = "/getUser")
-	public @ResponseBody Optional<User> getUser(
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) Integer id) {
-		if (id != null) {
-			return userRepository.findById(id);
-		}
-		// else if (name != null) {
-		// return userRepository.findByName(name).stream().findAny();
-		// }
-		else {
-			return Optional.empty();
-		}
-
-	}
+//	@CrossOrigin
+//	@GetMapping(path = "/getUser")
+//	public @ResponseBody Optional<User> getUser(
+//			@RequestParam(required = false) String name,
+//			@RequestParam(required = false) Integer id) {
+//		if (id != null) {
+//			return userRepository.findById(id);
+//		}
+//		// else if (name != null) {
+//		// return userRepository.findByName(name).stream().findAny();
+//		// }
+//		else {
+//			return Optional.empty();
+//		}
+//
+//	}
 
 	//	@Transactional
 	//	@CrossOrigin
