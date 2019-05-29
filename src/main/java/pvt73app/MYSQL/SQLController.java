@@ -378,6 +378,7 @@ public class SQLController {
 			@RequestParam(required = false)int rating,
 			@RequestParam(required = false)String date,
 			@RequestParam(required = false)String title){
+		createUserTrails(tid, uid, false);
 		LocalDateTime cdate = LocalDateTime.parse(date);
 		TrailReview trailReview = new TrailReview();
 		trailReview.setTid(tid);
