@@ -778,13 +778,15 @@ public class SQLController {
 	public ResponseEntity<List<FeedElement>> getUserFeed(@PathVariable(required = true, value = "id") int id)
 			throws ResourceNotFoundException {
 		List<FeedElement> feedElements = new ArrayList<>();
-		getUserTrailsById(id).getBody().forEach(ut ->  {
-			feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
-			feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
-			
-			//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
-			//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
-		});
+		List<UserTrails> userTrails = getUserTrailsById(id).getBody();
+		if (userTrails != null)
+			userTrails.forEach(ut ->  {
+				feedElements.addAll((List<UserRuns>) userRunsRepository.findByTid(ut.getTid()));
+				feedElements.addAll(trailReviewRepository.findByTid(ut.getTid()));
+				
+				//challengeConnectorRepository.findByTid(ut.getTid()).forEach(cc -> 
+				//feedElements.add(challengeAttributesRepository.findById(cc.getCaid()).get()));
+			});
 		//getUserGroupConnectByUid(id).getBody(); // This makes it get all challenges from the users trails.
 
 		userGroupConnectRepository.findByUid(id).forEach(ugc -> {

@@ -63,7 +63,12 @@ public class APIRetriever {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<TrailDTO[]> responseEntity = restTemplate.getForEntity(TRAILS_URL, TrailDTO[].class);
 		TrailDTO[] objects = responseEntity.getBody();
-		return Arrays.asList(objects);
+		if (objects != null) {
+			return Arrays.asList(objects);
+		}
+		else {
+			return Arrays.asList();
+		}
 	}
 
 	//Tar in ett spårs attribut från Stockholms API
@@ -73,27 +78,27 @@ public class APIRetriever {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<JsonNode[]> responseEntity = restTemplate.getForEntity(url, JsonNode[].class);
 		JsonNode[] objects = responseEntity.getBody();
-
-		for (JsonNode node : objects) {
-			JsonNode value = node.get(VALUE);
-
-			try {
-				if (value != null) {
-					if (value.isTextual()) {
-						attributes.add(mapper.treeToValue(node, TrailAttributeStringValueDTO.class));
-					} else if (value.isObject()) {
-						attributes.add(mapper.treeToValue(node, TrailAttributeObjectValueDTO.class));
+		if (objects != null)
+			for (JsonNode node : objects) {
+				JsonNode value = node.get(VALUE);
+	
+				try {
+					if (value != null) {
+						if (value.isTextual()) {
+							attributes.add(mapper.treeToValue(node, TrailAttributeStringValueDTO.class));
+						} else if (value.isObject()) {
+							attributes.add(mapper.treeToValue(node, TrailAttributeObjectValueDTO.class));
+						}
+					} else {
+						value = node.get(VALUES);
+						if (value != null && value.isArray()) {
+							attributes.add(mapper.treeToValue(node, TrailAttributeValuesArrayDTO.class));
+						}
 					}
-				} else {
-					value = node.get(VALUES);
-					if (value != null && value.isArray()) {
-						attributes.add(mapper.treeToValue(node, TrailAttributeValuesArrayDTO.class));
-					}
+				} catch (Exception e) {
+	
 				}
-			} catch (Exception e) {
-
 			}
-		}
 
 		return attributes;
 	}
@@ -116,16 +121,16 @@ public class APIRetriever {
 		TrailLocationDTO[] locations = responseEntity.getBody();
 
 		String locationName = "";
-
-		for (TrailLocationDTO location : locations) {
-			if (locations.length > 1) {
-				if (location.getId() != 0) {
+		if (locations != null)
+			for (TrailLocationDTO location : locations) {
+				if (locations.length > 1) {
+					if (location.getId() != 0) {
+						locationName = location.getName();
+					}
+				} else {
 					locationName = location.getName();
 				}
-			} else {
-				locationName = location.getName();
 			}
-		}
 
 		return locationName;
 	}
