@@ -353,16 +353,16 @@ import pvt73app.ProjectmApplication;
      }
      
      //@Test
-     public void testRemoveChallenge() {
-    	 int cid = 1;
-    	 
-    	 Challenge chall = restTemplate.getForObject(getRootUrl() + "challenge/" + cid, Challenge.class);
-    	 assertNotNull(chall);
-    	 
-    	 Map<String, Boolean> objMap = restTemplate.getForObject(getRootUrl() + "/deleteChallenge/" + cid, Map.class);
-    	 assertEquals(Boolean.TRUE, objMap.get("deleted"));
-    	 
-     }
+//     public void testRemoveChallenge() {
+//    	 int cid = 1;
+//    	 
+//    	 Challenge chall = restTemplate.getForObject(getRootUrl() + "challenge/" + cid, Challenge.class);
+//    	 assertNotNull(chall);
+//    	 
+//    	 Map<String, Boolean> objMap = restTemplate.getForObject(getRootUrl() + "/deleteChallenge/" + cid, Map.class);
+//    	 assertEquals(Boolean.TRUE, objMap.get("deleted"));
+//    	 
+//     }
      
      @Test
      public void testAddNewGroup() { // TODO: Make it remove the group after
@@ -552,8 +552,35 @@ import pvt73app.ProjectmApplication;
      }
      
      @Test
-     public void testUpdateUserGroup() {
+     public void testUpdateUserGroupNew() {
+    	 int gid = 101;
+    	 String newName = "Does it work?";
+    	 UserGroup ug = restTemplate.getForObject(getRootUrl() + "/userGroup/" + gid, UserGroup.class);
+    	 assertNotNull(ug);
+    	 assertEquals("COOL TEMP GROUP", ug.getGroupName());
     	 
+    	 String response = restTemplate.getForObject(getRootUrl() + "/updateUserGroup?id=" + gid + "&groupname=" + newName, String.class);
+    	 assertNotNull(response);
+    	 assertEquals("Updated", response);
+    	 
+    	 ug = restTemplate.getForObject(getRootUrl() + "/userGroup/" + gid, UserGroup.class);
+    	 assertNotNull(ug);
+    	 assertEquals(newName, ug.getGroupName());
+    	 
+    	 response = restTemplate.getForObject(getRootUrl() + "/updateUserGroup?id=" + gid + "&groupname=" + "COOL TEMP GROUP", String.class);
+    	 assertNotNull(response);
+    	 assertEquals("Updated", response);
+    	 
+    	 ug = restTemplate.getForObject(getRootUrl() + "/userGroup/" + gid, UserGroup.class);
+    	 assertNotNull(ug);
+    	 assertEquals("COOL TEMP GROUP", ug.getGroupName());
+    	 
+     }
+     
+     @Test
+     public void testAllUserGroups() {
+    	 List<UserGroup> list = restTemplate.getForObject(getRootUrl() + "/allUserGroups", List.class);
+    	 assertNotNull(list);
      }
      
 //	 @Test //TODO: Test not working don't know how to make sure the return class is correct

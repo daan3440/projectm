@@ -119,10 +119,10 @@ public class SQLController {
 			challenge.setName(name);
 
 		final Challenge updatedChallenge = challengeRepository.save(challenge);
-		if(updatedChallenge != null)
+		//if(updatedChallenge != null)
 			return "Updated";
-		else
-			return "No update";
+		//else
+		//	return "No update";
 	}
 
 	//    @DeleteMapping("/challenges/{id}")
@@ -199,10 +199,10 @@ public class SQLController {
 			challengeAttributes.setComplete(complete);
 
 		final ChallengeAttributes updatedChallengeAttributes = challengeAttributesRepository.save(challengeAttributes);
-		if(updatedChallengeAttributes != null)
+//		if(updatedChallengeAttributes != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/challengeAttributesattributes/{id}")
@@ -264,10 +264,10 @@ public class SQLController {
 			challengeConnector.setTid(tid);
 
 		final ChallengeConnector updatedChallengeConnector = challengeConnectorRepository.save(challengeConnector);
-		if(updatedChallengeConnector != null)
+//		if(updatedChallengeConnector != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/challengeConnectorattributes/{id}")
@@ -324,10 +324,10 @@ public class SQLController {
 			groupChallengeConnect.setCid(cid);
 
 		final GroupChallengeConnect updatedGroupChallengeConnect = groupChallengeConnectRepository.save(groupChallengeConnect);
-		if(updatedGroupChallengeConnect != null)
+//		if(updatedGroupChallengeConnect != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/groupChallengeConnectattributes/{id}")
@@ -419,10 +419,10 @@ public class SQLController {
 			trailReview.get(0).setTitle(title);
 
 		final TrailReview updatedTrailReview = trailReviewRepository.save(trailReview.get(0));
-		if(updatedTrailReview != null)
+//		if(updatedTrailReview != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/trailReviewattributes/{id}")
@@ -514,10 +514,10 @@ public class SQLController {
 			userRuns.setComment(comment);
 
 		final UserRuns updatedUserRuns = userRunsRepository.save(userRuns);
-		if(updatedUserRuns != null)
+//		if(updatedUserRuns != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/userRunsattributes/{id}")
@@ -574,10 +574,10 @@ public class SQLController {
 		if(groupname != null)
 			userGroup.setGroupName(groupname);		
 		final UserGroup updatedUserGroup = userGroupRepository.save(userGroup);
-		if(updatedUserGroup != null)
+		//if(updatedUserGroup != null)
 			return "Updated";
-		else
-			return "No update";
+		//else
+			//return "No update";
 	}
 
 	//    @DeleteMapping("/userGroupattributes/{id}")
@@ -586,6 +586,7 @@ public class SQLController {
 			throws ResourceNotFoundException {
 		UserGroup userGroup = userGroupRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ChallengeAttribute finns inte - id :: " + id));
+		userGroupConnectRepository.deleteAll(userGroupConnectRepository.findByGid(id));
 		userGroupRepository.delete(userGroup);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -621,7 +622,7 @@ public class SQLController {
 	}
 
 	//    @DeleteMapping("/userGroupConnectattributes/{id}")
-	@RequestMapping(value = "/deleteUserGroupConnect/{uid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteUserGroupConnect", method = RequestMethod.GET)
 	public Map<String, Boolean> deleteUserGroupConnect(@PathVariable(value = "uid", required = true) int uid, 
 													   @PathVariable(value = "gid", required = true) int gid)
 			throws ResourceNotFoundException {
@@ -681,10 +682,10 @@ public class SQLController {
 		UserAdminGroup userAdminGroup = userAdminGroupRepository.findByUid(uid)
 				.orElseThrow(() -> new ResourceNotFoundException("UserAdminGroup finns inte - uid :: " + uid));		
 		final UserAdminGroup updatedUserAdminGroup = userAdminGroupRepository.save(userAdminGroup);
-		if(updatedUserAdminGroup != null)
+//		if(updatedUserAdminGroup != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/userAdminGroupattributes/{id}")
@@ -751,10 +752,10 @@ public class SQLController {
 			ur.setFavourite(favourite); // TODO: Think this is how it should look? signed: Anton
 		});
 		final Iterable<UserTrails> updatedUserTrails = userTrailsRepository.saveAll(userTrails);
-		if(updatedUserTrails != null)
+//		if(updatedUserTrails != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/userTrailsattributes/{id}")
@@ -903,10 +904,10 @@ public class SQLController {
 			user.setPassword(psw);
 
 		final User updatedUser = userRepository.save(user);
-		if(updatedUser != null)
+//		if(updatedUser != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	//    @DeleteMapping("/userattributes/{id}")
@@ -1067,10 +1068,10 @@ public class SQLController {
 			trail.setImage(image);
 
 		final Trail updatedTrail = trailRepository.save(trail);
-		if(updatedTrail != null)
+//		if(updatedTrail != null)
 			return "Updated";
-		else
-			return "No update";
+//		else
+//			return "No update";
 	}
 
 	@CrossOrigin
