@@ -473,6 +473,8 @@ public class SQLController {
 			@RequestParam(required = true) int length,
 			@RequestParam(required = false) String comment
 			){
+		
+		createUserTrails(tid, uid, false);
 		LocalDateTime cdate = LocalDateTime.parse(date);
 		UserRuns userRuns = new UserRuns();
 		userRuns.setUid(uid);
