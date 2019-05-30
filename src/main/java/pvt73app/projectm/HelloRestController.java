@@ -98,8 +98,6 @@ public class HelloRestController {
 	@ResponseBody
 	public HttpEntity<byte[]> getPhoto(@RequestParam(required = false, defaultValue = "default") String id)
 			throws IOException, URISyntaxException {
-		System.out.println("Anrop OK " + id);
-//		List<Trail> list = sql.getAllTrails();
 
 		File file = File.createTempFile("tmp", ".jpg");
 		if (!id.equals("default")) {
@@ -110,25 +108,11 @@ public class HelloRestController {
 		} else {
 			file = new File("/Volumes/Users/daniel/Images/Duck.gif");
 		}
-//				if (id.equals("9f7ee227-db45-4f54-87c9-3b39234190ef")) {
-		System.out.println("Rätt ID");
-//		FileInputStream input = new FileInputStream(file);
-//		MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
-////							MultipartFile multipartFile = new MockMultipartFile("file", id+".jpg", "text/plain",
-//				IOUtils.toByteArray(input));
-////					RedirectAttributes reAtt = null;
-////			new FTPController().handleFileUpload(multipartFile, reAtt);
-//		new FTPController().handleRawFileUpload(multipartFile, id);
-////				}
-////		for (Trail t : list) {
-////			if (!imageID.equals(t.getImage())) {
-////			}
-////		}
 
 		byte[] image = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.ALL);
+		headers.setContentType(MediaType.IMAGE_JPEG);
 		headers.setContentLength(image.length);
 		return new HttpEntity<byte[]>(image, headers);
 	}
