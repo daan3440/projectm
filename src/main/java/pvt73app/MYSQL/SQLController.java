@@ -442,7 +442,15 @@ public class SQLController {
 	@CrossOrigin
 	@GetMapping("/userRuns")
 	public List<UserRuns> getAllUserRuns() {
-		return (List<UserRuns>) userRunsRepository.findAll();
+		List<UserRuns> allRuns = (List<UserRuns>) userRunsRepository.findAll();
+		allRuns.sort(new Comparator<UserRuns>() {
+
+			@Override
+			public int compare(UserRuns ur1, UserRuns ur2) {
+				return ur2.getDate().compareTo(ur1.getDate());
+			}
+		});
+		return allRuns;
 	}
 	@CrossOrigin
 	@GetMapping("/userRuns/{id}")
